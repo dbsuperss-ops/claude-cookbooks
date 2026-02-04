@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Agent SDK — Technical Introduction</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --surface: #17171e;
+    --surface2: #1e1e28;
+    --border: #2a2a38;
+    --text: #e4e4ed;
+    --text-muted: #8888a0;
+    --accent: #d4a27f;
+    --accent2: #c4785a;
+    --blue: #7aafff;
+    --green: #7ae8a0;
+    --purple: #b49aff;
+    --red: #ff7a7a;
+    --yellow: #f0d080;
+    --cyan: #7ae8e8;
+    --code-bg: #12121a;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 18px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 6rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .45s ease;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Typography ── */
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: var(--accent);
+  }
+
+  p, li {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  ul { list-style: none; padding: 0; }
+
+  ul li {
+    position: relative;
+    padding-left: 1.6rem;
+    margin-bottom: 0.55rem;
+  }
+
+  ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1.7;
+  }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  .accent { color: var(--accent); }
+  .blue { color: var(--blue); }
+  .green { color: var(--green); }
+  .purple { color: var(--purple); }
+  .cyan { color: var(--cyan); }
+  .yellow { color: var(--yellow); }
+  .red { color: var(--red); }
+  .muted { color: var(--text-muted); }
+  .small { font-size: 0.85rem; }
+  .mono { font-family: var(--font-mono); }
+
+  /* ── Code Blocks ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem 1.6rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    margin: 0.8rem 0;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  .inline-code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--accent);
+  }
+
+  /* syntax colouring */
+  .kw { color: var(--purple); }
+  .fn { color: var(--blue); }
+  .str { color: var(--green); }
+  .cmt { color: #555570; font-style: italic; }
+  .typ { color: var(--cyan); }
+  .num { color: var(--yellow); }
+  .op { color: var(--text-muted); }
+  .dec { color: var(--yellow); }
+  .par { color: var(--accent); }
+
+  /* ── Layout helpers ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .card h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 3px;
+    margin: 0.8rem 0 1.2rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Progress bar ── */
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width .35s ease;
+    z-index: 100;
+  }
+
+  /* ── Slide counter ── */
+  .counter {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    z-index: 100;
+  }
+
+  /* ── Nav hint ── */
+  .nav-hint {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 2rem;
+    font-size: 0.75rem;
+    color: #444460;
+    z-index: 100;
+  }
+
+  /* ── Title slide specifics ── */
+  .title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title-slide h1 {
+    font-size: 3.8rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-slide .subtitle {
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  .title-slide .meta {
+    margin-top: 2.5rem;
+    font-size: 0.9rem;
+    color: #555570;
+  }
+
+  /* section divider slides */
+  .section-slide {
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 8rem;
+  }
+
+  .section-slide h1 {
+    font-size: 3rem;
+    color: var(--accent);
+  }
+
+  .section-slide p {
+    font-size: 1.3rem;
+    max-width: 600px;
+  }
+
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--surface2);
+    position: absolute;
+    right: 6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  /* diagram boxes */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+
+  .arch-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 1.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .arch-arrow {
+    color: var(--accent);
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .arch-box.highlight {
+    border-color: var(--accent);
+    background: rgba(212, 162, 127, 0.08);
+  }
+
+  /* comparison blocks */
+  .vs-block {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .vs-block > div {
+    flex: 1;
+  }
+
+  .vs-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+
+  @media (max-width: 1200px) {
+    .slide { padding: 3rem 3rem; }
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 1.8rem; }
+    pre { font-size: 0.78rem; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .section-num { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="nav-hint">← →  or click to advance</div>
+
+<div class="deck" id="deck">
+
+<!-- ============================================================ -->
+<!-- SLIDE 1 — TITLE -->
+<!-- ============================================================ -->
+<div class="slide title-slide active">
+  <h1>Claude Agent SDK</h1>
+  <p class="subtitle">Build production AI agents with Claude Code as a library</p>
+  <div class="divider" style="margin: 1rem auto;"></div>
+  <p class="meta">Python &nbsp;·&nbsp; Technical Introduction &nbsp;·&nbsp; 2026</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2 — THE PROBLEM -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>The Problem with Building Agents Today</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Without Agent SDK</h3>
+      <ul>
+        <li>You implement the <strong>tool loop</strong> yourself</li>
+        <li>You build tool execution, retries, context management</li>
+        <li>You handle permissions, sandboxing, error recovery</li>
+        <li>Every project re-invents the same orchestration</li>
+      </ul>
+      <pre style="margin-top:1rem;"><span class="cmt"># Client SDK — you own the loop</span>
+<span class="par">response</span> <span class="op">=</span> client.messages.<span class="fn">create</span>(...)
+<span class="kw">while</span> response.stop_reason <span class="op">==</span> <span class="str">"tool_use"</span>:
+    result <span class="op">=</span> <span class="fn">your_tool_executor</span>(response)
+    response <span class="op">=</span> client.messages.<span class="fn">create</span>(
+        tool_result<span class="op">=</span>result, ...
+    )</pre>
+    </div>
+    <div>
+      <h3>With Agent SDK</h3>
+      <ul>
+        <li><strong>Claude handles tools autonomously</strong></li>
+        <li>Built-in file I/O, shell, web, and search tools</li>
+        <li>Permission modes, hooks, sandboxing included</li>
+        <li>Same engine that powers <strong>Claude Code</strong></li>
+      </ul>
+      <pre style="margin-top:1rem;"><span class="cmt"># Agent SDK — Claude handles it</span>
+<span class="kw">async for</span> message <span class="kw">in</span> <span class="fn">query</span>(
+    prompt<span class="op">=</span><span class="str">"Fix the bug in auth.py"</span>,
+    options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+        allowed_tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Edit"</span>, <span class="str">"Bash"</span>]
+    )
+):
+    <span class="fn">print</span>(message)</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3 — VALUE PROPOSITION -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Value Proposition</h2>
+  <div class="divider"></div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>Zero-Boilerplate Agents</h3>
+      <p>9 built-in tools, autonomous tool loop, context management — start with one function call.</p>
+    </div>
+    <div class="card">
+      <h3>Production Guardrails</h3>
+      <p>Permission modes, hook-based interception, sandboxing, budget caps, and max-turn limits out of the box.</p>
+    </div>
+    <div class="card">
+      <h3>Composable Architecture</h3>
+      <p>Subagents for parallel work, MCP for external tools, sessions for multi-turn memory, custom tools via decorators.</p>
+    </div>
+  </div>
+  <div style="margin-top: 2rem;">
+    <span class="badge">pip install claude-agent-sdk</span>
+    <span class="badge">Python ≥ 3.10</span>
+    <span class="badge">Async-first</span>
+    <span class="badge">MIT License</span>
+    <span class="badge">Bedrock / Vertex / Foundry</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4 — SECTION: ARCHITECTURE -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Architecture</h1>
+  <p>How the agent loop works under the hood</p>
+  <div class="section-num">01</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5 — ARCHITECTURE DIAGRAM -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>The Agent Loop</h2>
+  <div class="divider"></div>
+  <div class="arch-flow" style="justify-content: center; margin: 1.5rem 0;">
+    <div class="arch-box">Your Code</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box highlight">query() / ClaudeSDKClient</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">Claude Code Runtime</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">Claude Model</div>
+  </div>
+  <div class="arch-flow" style="justify-content: center; margin: 0.5rem 0;">
+    <div class="arch-box" style="border-color:var(--blue);">Gather Context</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="border-color:var(--green);">Take Action</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="border-color:var(--purple);">Verify Work</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box" style="border-color:var(--yellow);">Repeat / Finish</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div>
+      <h3>Two Entry Points</h3>
+      <table>
+        <tr><th>Feature</th><th>query()</th><th>ClaudeSDKClient</th></tr>
+        <tr><td>Session</td><td>New each call</td><td>Persistent</td></tr>
+        <tr><td>Multi-turn</td><td>—</td><td>Yes</td></tr>
+        <tr><td>Hooks & Tools</td><td>—</td><td>Yes</td></tr>
+        <tr><td>Interrupts</td><td>—</td><td>Yes</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Message Stream</h3>
+      <p>Both return an <span class="inline-code">AsyncIterator[Message]</span>. Each iteration yields one of:</p>
+      <ul>
+        <li><strong class="cyan">AssistantMessage</strong> — Claude's reasoning + tool calls</li>
+        <li><strong class="green">UserMessage</strong> — echoed inputs</li>
+        <li><strong class="purple">SystemMessage</strong> — init metadata</li>
+        <li><strong class="yellow">ResultMessage</strong> — final cost, usage, session_id</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6 — SECTION: GETTING STARTED -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Getting Started</h1>
+  <p>From install to running your first agent</p>
+  <div class="section-num">02</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7 — INSTALL & FIRST AGENT -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Setup &amp; First Agent</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>1. Install</h3>
+<pre><span class="cmt"># Install Claude Code runtime</span>
+curl -fsSL https://claude.ai/install.sh | bash
+
+<span class="cmt"># Install the Python SDK</span>
+pip install claude-agent-sdk
+
+<span class="cmt"># Set your API key</span>
+export ANTHROPIC_API_KEY=sk-ant-...</pre>
+      <p class="small muted" style="margin-top:0.5rem;">Also supports Bedrock, Vertex AI, and Azure Foundry.</p>
+    </div>
+    <div>
+      <h3>2. Run</h3>
+<pre><span class="kw">import</span> asyncio
+<span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> (
+    query, <span class="typ">ClaudeAgentOptions</span>,
+    <span class="typ">AssistantMessage</span>, <span class="typ">ResultMessage</span>
+)
+
+<span class="kw">async def</span> <span class="fn">main</span>():
+    <span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+        prompt<span class="op">=</span><span class="str">"Find TODOs in this repo"</span>,
+        options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+            allowed_tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Glob"</span>, <span class="str">"Grep"</span>]
+        )
+    ):
+        <span class="kw">if</span> <span class="fn">isinstance</span>(msg, <span class="typ">ResultMessage</span>):
+            <span class="fn">print</span>(msg.result)
+
+asyncio.<span class="fn">run</span>(<span class="fn">main</span>())</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8 — ClaudeAgentOptions Deep Dive -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2><span class="mono">ClaudeAgentOptions</span> — Key Fields</h2>
+  <div class="divider"></div>
+  <table>
+    <tr><th>Option</th><th>Type</th><th>Purpose</th></tr>
+    <tr><td><span class="inline-code">allowed_tools</span></td><td><span class="mono small">list[str]</span></td><td>Whitelist of built-in or MCP tools Claude can use</td></tr>
+    <tr><td><span class="inline-code">permission_mode</span></td><td><span class="mono small">PermissionMode</span></td><td><span class="inline-code">"acceptEdits"</span> | <span class="inline-code">"bypassPermissions"</span> | <span class="inline-code">"default"</span> | <span class="inline-code">"plan"</span></td></tr>
+    <tr><td><span class="inline-code">system_prompt</span></td><td><span class="mono small">str | SystemPromptPreset</span></td><td>Custom instructions or extend the Claude Code preset</td></tr>
+    <tr><td><span class="inline-code">mcp_servers</span></td><td><span class="mono small">dict[str, McpServerConfig]</span></td><td>External MCP servers (Playwright, DBs, APIs…)</td></tr>
+    <tr><td><span class="inline-code">agents</span></td><td><span class="mono small">dict[str, AgentDefinition]</span></td><td>Programmatic subagent definitions</td></tr>
+    <tr><td><span class="inline-code">hooks</span></td><td><span class="mono small">dict[HookEvent, list[HookMatcher]]</span></td><td>Lifecycle callbacks (security, audit, transforms)</td></tr>
+    <tr><td><span class="inline-code">max_turns</span></td><td><span class="mono small">int</span></td><td>Cap on conversation turns</td></tr>
+    <tr><td><span class="inline-code">max_budget_usd</span></td><td><span class="mono small">float</span></td><td>Spend limit per session</td></tr>
+    <tr><td><span class="inline-code">model</span></td><td><span class="mono small">str</span></td><td>Model override (e.g. <span class="inline-code">claude-sonnet-4-5-20250929</span>)</td></tr>
+    <tr><td><span class="inline-code">can_use_tool</span></td><td><span class="mono small">CanUseTool</span></td><td>Async callback for custom permission logic</td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9 — BUILT-IN TOOLS -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Built-in Tools</h2>
+  <div class="divider"></div>
+  <p style="margin-bottom:1rem;">No implementation needed — Claude executes these autonomously.</p>
+  <div class="grid-3">
+    <div class="card">
+      <h3 class="blue">File System</h3>
+      <table>
+        <tr><td><span class="inline-code">Read</span></td><td>Read any file (text, images, PDFs)</td></tr>
+        <tr><td><span class="inline-code">Write</span></td><td>Create new files</td></tr>
+        <tr><td><span class="inline-code">Edit</span></td><td>Precise string replacement edits</td></tr>
+        <tr><td><span class="inline-code">Glob</span></td><td>Find files by pattern</td></tr>
+        <tr><td><span class="inline-code">Grep</span></td><td>Regex search file contents</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 class="green">Execution</h3>
+      <table>
+        <tr><td><span class="inline-code">Bash</span></td><td>Run shell commands, scripts, git</td></tr>
+        <tr><td><span class="inline-code">NotebookEdit</span></td><td>Edit Jupyter notebook cells</td></tr>
+        <tr><td><span class="inline-code">Task</span></td><td>Spawn subagents</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 class="purple">Web &amp; UI</h3>
+      <table>
+        <tr><td><span class="inline-code">WebSearch</span></td><td>Search the web</td></tr>
+        <tr><td><span class="inline-code">WebFetch</span></td><td>Fetch & parse web pages</td></tr>
+        <tr><td><span class="inline-code">AskUserQuestion</span></td><td>Interactive multi-choice prompts</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10 — SECTION: CUSTOM TOOLS -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Custom Tools</h1>
+  <p>Extend Claude with your own Python functions via in-process MCP</p>
+  <div class="section-num">03</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11 — CUSTOM TOOLS CODE -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Defining Custom Tools</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>@tool decorator</h3>
+<pre><span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> tool
+<span class="kw">from</span> typing <span class="kw">import</span> <span class="typ">Any</span>
+
+<span class="dec">@tool</span>(<span class="str">"lookup_user"</span>,
+     <span class="str">"Look up a user by email"</span>,
+     {<span class="str">"email"</span>: <span class="typ">str</span>})
+<span class="kw">async def</span> <span class="fn">lookup_user</span>(
+    args: <span class="typ">dict</span>[<span class="typ">str</span>, <span class="typ">Any</span>]
+) -> <span class="typ">dict</span>[<span class="typ">str</span>, <span class="typ">Any</span>]:
+    user <span class="op">=</span> <span class="kw">await</span> db.<span class="fn">find</span>(args[<span class="str">"email"</span>])
+    <span class="kw">return</span> {
+        <span class="str">"content"</span>: [{
+            <span class="str">"type"</span>: <span class="str">"text"</span>,
+            <span class="str">"text"</span>: f<span class="str">"User: {user.name}"</span>
+        }]
+    }</pre>
+      <p class="small muted" style="margin-top:0.5rem;">Input schema supports simple types or full JSON Schema.</p>
+    </div>
+    <div>
+      <h3>Wire it up</h3>
+<pre><span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> (
+    create_sdk_mcp_server,
+    <span class="typ">ClaudeSDKClient</span>, <span class="typ">ClaudeAgentOptions</span>
+)
+
+server <span class="op">=</span> <span class="fn">create_sdk_mcp_server</span>(
+    name<span class="op">=</span><span class="str">"my_tools"</span>,
+    tools<span class="op">=</span>[lookup_user]
+)
+
+options <span class="op">=</span> <span class="typ">ClaudeAgentOptions</span>(
+    mcp_servers<span class="op">=</span>{<span class="str">"tools"</span>: server},
+    allowed_tools<span class="op">=</span>[
+        <span class="str">"mcp__tools__lookup_user"</span>
+    ]
+)
+
+<span class="kw">async with</span> <span class="typ">ClaudeSDKClient</span>(options) <span class="kw">as</span> c:
+    <span class="kw">await</span> c.<span class="fn">query</span>(<span class="str">"Find alice@co.com"</span>)
+    <span class="kw">async for</span> msg <span class="kw">in</span> c.<span class="fn">receive_response</span>():
+        <span class="fn">print</span>(msg)</pre>
+    </div>
+  </div>
+  <p style="margin-top:1rem;"><strong>Key insight:</strong> Custom tools run as <strong>in-process MCP servers</strong> — no separate process, no network hop. Tool name format: <span class="inline-code">mcp__&lt;server&gt;__&lt;tool&gt;</span></p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12 — SECTION: SUBAGENTS -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Subagents</h1>
+  <p>Parallel, context-isolated agents with specialized instructions</p>
+  <div class="section-num">04</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 13 — SUBAGENTS CODE -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Defining &amp; Using Subagents</h2>
+  <div class="divider"></div>
+<pre><span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> query, <span class="typ">ClaudeAgentOptions</span>, <span class="typ">AgentDefinition</span>
+
+<span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+    prompt<span class="op">=</span><span class="str">"Review auth module, then run tests"</span>,
+    options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+        allowed_tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Grep"</span>, <span class="str">"Glob"</span>, <span class="str">"Task"</span>],  <span class="cmt"># Task required for subagents</span>
+        agents<span class="op">=</span>{
+            <span class="str">"code-reviewer"</span>: <span class="typ">AgentDefinition</span>(
+                description<span class="op">=</span><span class="str">"Expert code reviewer for security and quality."</span>,
+                prompt<span class="op">=</span><span class="str">"Analyze code quality. Be thorough but concise."</span>,
+                tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Grep"</span>, <span class="str">"Glob"</span>],   <span class="cmt"># read-only access</span>
+                model<span class="op">=</span><span class="str">"sonnet"</span>
+            ),
+            <span class="str">"test-runner"</span>: <span class="typ">AgentDefinition</span>(
+                description<span class="op">=</span><span class="str">"Runs and analyzes test suites."</span>,
+                prompt<span class="op">=</span><span class="str">"Run tests and provide clear analysis of results."</span>,
+                tools<span class="op">=</span>[<span class="str">"Bash"</span>, <span class="str">"Read"</span>, <span class="str">"Grep"</span>]  <span class="cmt"># can execute commands</span>
+            ),
+        }
+    )
+):
+    <span class="kw">if</span> <span class="fn">hasattr</span>(msg, <span class="str">"result"</span>):
+        <span class="fn">print</span>(msg.result)</pre>
+
+  <div class="grid-3" style="margin-top:1.2rem;">
+    <div class="card">
+      <h3>Context Isolation</h3>
+      <p>Each subagent has its own context window. Only relevant results flow back to the orchestrator.</p>
+    </div>
+    <div class="card">
+      <h3>Parallelization</h3>
+      <p>Claude can spawn multiple subagents concurrently — e.g. review + test + lint simultaneously.</p>
+    </div>
+    <div class="card">
+      <h3>Tool Restrictions</h3>
+      <p>Limit subagents to specific tools. Omit <span class="inline-code">tools</span> to inherit all. Subagents <strong>cannot</strong> spawn subagents.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 14 — SECTION: HOOKS -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Hooks</h1>
+  <p>Intercept and control agent behavior at every execution point</p>
+  <div class="section-num">05</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 15 — HOOKS CODE -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Hook System</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Available Hook Events</h3>
+      <table>
+        <tr><th>Event</th><th>When</th></tr>
+        <tr><td><span class="inline-code">PreToolUse</span></td><td>Before tool executes (can block/modify)</td></tr>
+        <tr><td><span class="inline-code">PostToolUse</span></td><td>After tool completes (audit/log)</td></tr>
+        <tr><td><span class="inline-code">UserPromptSubmit</span></td><td>When user sends a prompt</td></tr>
+        <tr><td><span class="inline-code">Stop</span></td><td>Agent finishing execution</td></tr>
+        <tr><td><span class="inline-code">SubagentStop</span></td><td>Subagent completes</td></tr>
+        <tr><td><span class="inline-code">PreCompact</span></td><td>Before context compaction</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:0.5rem;">Callbacks receive (input_data, tool_use_id, context) and return a dict.</p>
+    </div>
+    <div>
+      <h3>Example: Block Dangerous Commands</h3>
+<pre><span class="kw">async def</span> <span class="fn">guard_bash</span>(input_data, tool_use_id, ctx):
+    cmd <span class="op">=</span> input_data[<span class="str">'tool_input'</span>].<span class="fn">get</span>(<span class="str">'command'</span>, <span class="str">''</span>)
+    <span class="kw">if</span> <span class="str">'rm -rf /'</span> <span class="kw">in</span> cmd:
+        <span class="kw">return</span> {
+            <span class="str">'hookSpecificOutput'</span>: {
+                <span class="str">'hookEventName'</span>: <span class="str">'PreToolUse'</span>,
+                <span class="str">'permissionDecision'</span>: <span class="str">'deny'</span>,
+                <span class="str">'permissionDecisionReason'</span>:
+                    <span class="str">'Blocked: destructive command'</span>
+            }
+        }
+    <span class="kw">return</span> {}
+
+options <span class="op">=</span> <span class="typ">ClaudeAgentOptions</span>(
+    hooks<span class="op">=</span>{
+        <span class="str">'PreToolUse'</span>: [
+            <span class="typ">HookMatcher</span>(
+                matcher<span class="op">=</span><span class="str">'Bash'</span>,
+                hooks<span class="op">=</span>[guard_bash]
+            )
+        ]
+    }
+)</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 16 — HOOKS: MODIFY + AUDIT -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Hooks: Transform &amp; Audit</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Redirect Writes to Sandbox</h3>
+<pre><span class="kw">async def</span> <span class="fn">sandbox_writes</span>(data, tid, ctx):
+    path <span class="op">=</span> data[<span class="str">'tool_input'</span>].<span class="fn">get</span>(<span class="str">'file_path'</span>, <span class="str">''</span>)
+    <span class="kw">return</span> {
+        <span class="str">'hookSpecificOutput'</span>: {
+            <span class="str">'hookEventName'</span>: <span class="str">'PreToolUse'</span>,
+            <span class="str">'permissionDecision'</span>: <span class="str">'allow'</span>,
+            <span class="str">'updatedInput'</span>: {
+                **data[<span class="str">'tool_input'</span>],
+                <span class="str">'file_path'</span>: f<span class="str">'/sandbox{path}'</span>
+            }
+        }
+    }
+
+<span class="cmt"># Matcher: only Write and Edit tools</span>
+<span class="typ">HookMatcher</span>(
+    matcher<span class="op">=</span><span class="str">'Write|Edit'</span>,
+    hooks<span class="op">=</span>[sandbox_writes]
+)</pre>
+    </div>
+    <div>
+      <h3>Audit Log Every Tool Call</h3>
+<pre><span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+<span class="kw">async def</span> <span class="fn">audit_log</span>(data, tid, ctx):
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">'audit.log'</span>, <span class="str">'a'</span>) <span class="kw">as</span> f:
+        f.<span class="fn">write</span>(
+            f<span class="str">"{datetime.now().isoformat()} "</span>
+            f<span class="str">"tool={data['tool_name']} "</span>
+            f<span class="str">"id={tid}\n"</span>
+        )
+    <span class="kw">return</span> {}
+
+<span class="cmt"># No matcher → runs for ALL tools</span>
+<span class="typ">HookMatcher</span>(hooks<span class="op">=</span>[audit_log])</pre>
+      <h3 style="margin-top:1.2rem;">Hook Decision Priority</h3>
+      <div class="arch-flow">
+        <div class="arch-box" style="border-color:var(--red);">deny</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="border-color:var(--yellow);">ask</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="border-color:var(--green);">allow</div>
+      </div>
+      <p class="small muted">Any deny → blocked. Multiple hooks chain in array order.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 17 — SECTION: PERMISSIONS -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Permissions &amp; Safety</h1>
+  <p>Fine-grained control over what your agent can do</p>
+  <div class="section-num">06</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 18 — PERMISSIONS -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Permission Modes &amp; Custom Authorization</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Permission Modes</h3>
+      <table>
+        <tr><th>Mode</th><th>Behavior</th></tr>
+        <tr><td><span class="inline-code">default</span></td><td>Uses <span class="inline-code">can_use_tool</span> callback for every tool call</td></tr>
+        <tr><td><span class="inline-code">acceptEdits</span></td><td>Auto-approves file edits, asks for others</td></tr>
+        <tr><td><span class="inline-code">plan</span></td><td>Planning only — no execution</td></tr>
+        <tr><td><span class="inline-code">bypassPermissions</span></td><td>Full auto-approve (CI/CD)</td></tr>
+      </table>
+      <h3 style="margin-top:1.2rem;">Additional Guardrails</h3>
+      <ul>
+        <li><span class="inline-code">max_turns</span> — cap conversation iterations</li>
+        <li><span class="inline-code">max_budget_usd</span> — hard spend limit</li>
+        <li><span class="inline-code">disallowed_tools</span> — explicit blocklist</li>
+        <li><span class="inline-code">sandbox</span> — command sandboxing with network control</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Custom <span class="mono">can_use_tool</span></h3>
+<pre><span class="kw">from</span> claude_agent_sdk.types <span class="kw">import</span> (
+    <span class="typ">PermissionResultAllow</span>,
+    <span class="typ">PermissionResultDeny</span>
+)
+
+<span class="kw">async def</span> <span class="fn">authorize</span>(
+    tool_name: <span class="typ">str</span>,
+    input_data: <span class="typ">dict</span>,
+    context: <span class="typ">ToolPermissionContext</span>
+) -> <span class="typ">PermissionResult</span>:
+    <span class="cmt"># Block writes to system dirs</span>
+    path <span class="op">=</span> input_data.<span class="fn">get</span>(<span class="str">"file_path"</span>, <span class="str">""</span>)
+    <span class="kw">if</span> path.<span class="fn">startswith</span>(<span class="str">"/system/"</span>):
+        <span class="kw">return</span> <span class="typ">PermissionResultDeny</span>(
+            message<span class="op">=</span><span class="str">"System dir blocked"</span>,
+            interrupt<span class="op">=</span><span class="kw">True</span>
+        )
+    <span class="cmt"># Redirect config writes</span>
+    <span class="kw">if</span> <span class="str">"config"</span> <span class="kw">in</span> path:
+        <span class="kw">return</span> <span class="typ">PermissionResultAllow</span>(
+            updated_input<span class="op">=</span>{
+                **input_data,
+                <span class="str">"file_path"</span>: f<span class="str">"./safe/{path}"</span>
+            }
+        )
+    <span class="kw">return</span> <span class="typ">PermissionResultAllow</span>()</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 19 — SECTION: SESSIONS & MCP -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Sessions &amp; MCP</h1>
+  <p>Multi-turn memory and connecting to external systems</p>
+  <div class="section-num">07</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 20 — SESSIONS -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Session Continuity</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>ClaudeSDKClient — Multi-Turn</h3>
+<pre><span class="kw">async with</span> <span class="typ">ClaudeSDKClient</span>(options) <span class="kw">as</span> c:
+    <span class="cmt"># Turn 1</span>
+    <span class="kw">await</span> c.<span class="fn">query</span>(<span class="str">"Read the auth module"</span>)
+    <span class="kw">async for</span> msg <span class="kw">in</span> c.<span class="fn">receive_response</span>():
+        <span class="fn">print_text</span>(msg)
+
+    <span class="cmt"># Turn 2 — Claude remembers context</span>
+    <span class="kw">await</span> c.<span class="fn">query</span>(<span class="str">"Now find all callers of it"</span>)
+    <span class="kw">async for</span> msg <span class="kw">in</span> c.<span class="fn">receive_response</span>():
+        <span class="fn">print_text</span>(msg)
+
+    <span class="cmt"># Turn 3 — still same session</span>
+    <span class="kw">await</span> c.<span class="fn">query</span>(<span class="str">"Refactor to use JWT"</span>)
+    <span class="kw">async for</span> msg <span class="kw">in</span> c.<span class="fn">receive_response</span>():
+        <span class="fn">print_text</span>(msg)</pre>
+    </div>
+    <div>
+      <h3>Resume with query()</h3>
+<pre>session_id <span class="op">=</span> <span class="kw">None</span>
+
+<span class="cmt"># First query — capture session</span>
+<span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+    prompt<span class="op">=</span><span class="str">"Read auth module"</span>,
+    options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+        allowed_tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Glob"</span>]
+    )
+):
+    <span class="kw">if</span> <span class="fn">hasattr</span>(msg, <span class="str">'session_id'</span>):
+        session_id <span class="op">=</span> msg.session_id
+
+<span class="cmt"># Second query — resume session</span>
+<span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+    prompt<span class="op">=</span><span class="str">"Find all callers"</span>,
+    options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+        resume<span class="op">=</span>session_id
+    )
+):
+    <span class="kw">if</span> <span class="fn">hasattr</span>(msg, <span class="str">"result"</span>):
+        <span class="fn">print</span>(msg.result)</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 21 — MCP -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>MCP — Model Context Protocol</h2>
+  <div class="divider"></div>
+  <p>Connect your agent to <strong>any external system</strong> via MCP servers — databases, browsers, APIs, and <a href="https://github.com/modelcontextprotocol/servers" style="color:var(--blue);">hundreds more</a>.</p>
+  <div class="grid-2" style="margin-top:1rem;">
+    <div>
+      <h3>External MCP Server</h3>
+<pre><span class="cmt"># Browser automation via Playwright MCP</span>
+options <span class="op">=</span> <span class="typ">ClaudeAgentOptions</span>(
+    mcp_servers<span class="op">=</span>{
+        <span class="str">"playwright"</span>: {
+            <span class="str">"command"</span>: <span class="str">"npx"</span>,
+            <span class="str">"args"</span>: [<span class="str">"@playwright/mcp@latest"</span>]
+        }
+    }
+)
+
+<span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+    prompt<span class="op">=</span><span class="str">"Open example.com and describe it"</span>,
+    options<span class="op">=</span>options
+):
+    <span class="fn">print</span>(msg)</pre>
+    </div>
+    <div>
+      <h3>MCP Server Types</h3>
+      <table>
+        <tr><th>Type</th><th>Config</th></tr>
+        <tr><td><strong>stdio</strong></td><td><span class="inline-code">command</span> + <span class="inline-code">args</span></td></tr>
+        <tr><td><strong>SSE</strong></td><td><span class="inline-code">url</span> + <span class="inline-code">headers</span></td></tr>
+        <tr><td><strong>HTTP</strong></td><td><span class="inline-code">url</span> + <span class="inline-code">headers</span></td></tr>
+        <tr><td><strong>SDK (in-process)</strong></td><td><span class="inline-code">create_sdk_mcp_server()</span></td></tr>
+      </table>
+      <p class="small muted" style="margin-top:0.8rem;">Tool naming convention: <span class="inline-code">mcp__&lt;server&gt;__&lt;tool&gt;</span></p>
+      <p class="small muted">e.g. <span class="inline-code">mcp__playwright__browser_click</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 22 — SECTION: PATTERNS -->
+<!-- ============================================================ -->
+<div class="slide section-slide">
+  <h1>Putting It Together</h1>
+  <p>Production patterns and real-world agent design</p>
+  <div class="section-num">08</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 23 — FULL EXAMPLE -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Full Example: CI Code Review Agent</h2>
+  <div class="divider"></div>
+<pre style="font-size:0.82rem;"><span class="kw">import</span> asyncio
+<span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> (
+    query, <span class="typ">ClaudeAgentOptions</span>, <span class="typ">AgentDefinition</span>,
+    <span class="typ">HookMatcher</span>, <span class="typ">ResultMessage</span>
+)
+
+<span class="kw">async def</span> <span class="fn">block_force_push</span>(data, tid, ctx):
+    cmd <span class="op">=</span> data[<span class="str">'tool_input'</span>].<span class="fn">get</span>(<span class="str">'command'</span>, <span class="str">''</span>)
+    <span class="kw">if</span> <span class="str">'--force'</span> <span class="kw">in</span> cmd <span class="kw">or</span> <span class="str">'push -f'</span> <span class="kw">in</span> cmd:
+        <span class="kw">return</span> {<span class="str">'hookSpecificOutput'</span>: {<span class="str">'hookEventName'</span>: <span class="str">'PreToolUse'</span>,
+                 <span class="str">'permissionDecision'</span>: <span class="str">'deny'</span>, <span class="str">'permissionDecisionReason'</span>: <span class="str">'No force push in CI'</span>}}
+    <span class="kw">return</span> {}
+
+<span class="kw">async def</span> <span class="fn">main</span>(pr_diff: <span class="typ">str</span>):
+    <span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(
+        prompt<span class="op">=</span>f<span class="str">"Review this PR diff and post findings:\n{pr_diff}"</span>,
+        options<span class="op">=</span><span class="typ">ClaudeAgentOptions</span>(
+            system_prompt<span class="op">=</span><span class="str">"You are a senior code reviewer. Focus on bugs, security, and performance."</span>,
+            allowed_tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Grep"</span>, <span class="str">"Glob"</span>, <span class="str">"Bash"</span>, <span class="str">"Task"</span>],
+            permission_mode<span class="op">=</span><span class="str">"bypassPermissions"</span>,   <span class="cmt"># CI — no interactive prompts</span>
+            max_turns<span class="op">=</span><span class="num">25</span>,
+            max_budget_usd<span class="op">=</span><span class="num">2.0</span>,
+            hooks<span class="op">=</span>{<span class="str">'PreToolUse'</span>: [<span class="typ">HookMatcher</span>(matcher<span class="op">=</span><span class="str">'Bash'</span>, hooks<span class="op">=</span>[block_force_push])]},
+            agents<span class="op">=</span>{
+                <span class="str">"security-scanner"</span>: <span class="typ">AgentDefinition</span>(
+                    description<span class="op">=</span><span class="str">"Scans code for OWASP vulnerabilities."</span>,
+                    prompt<span class="op">=</span><span class="str">"Check for injection, XSS, auth issues."</span>,
+                    tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Grep"</span>, <span class="str">"Glob"</span>], model<span class="op">=</span><span class="str">"sonnet"</span>
+                )
+            }
+        )
+    ):
+        <span class="kw">if</span> <span class="fn">isinstance</span>(msg, <span class="typ">ResultMessage</span>):
+            <span class="fn">print</span>(f<span class="str">"Review done. Cost: ${msg.total_cost_usd:.4f}"</span>)</pre>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 24 — STRUCTURED OUTPUT -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Structured Output &amp; Advanced Options</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>JSON Schema Output</h3>
+<pre>options <span class="op">=</span> <span class="typ">ClaudeAgentOptions</span>(
+    output_format<span class="op">=</span>{
+        <span class="str">"type"</span>: <span class="str">"json_schema"</span>,
+        <span class="str">"schema"</span>: {
+            <span class="str">"type"</span>: <span class="str">"object"</span>,
+            <span class="str">"properties"</span>: {
+                <span class="str">"bugs"</span>: {
+                    <span class="str">"type"</span>: <span class="str">"array"</span>,
+                    <span class="str">"items"</span>: {
+                        <span class="str">"type"</span>: <span class="str">"object"</span>,
+                        <span class="str">"properties"</span>: {
+                            <span class="str">"file"</span>: {<span class="str">"type"</span>: <span class="str">"string"</span>},
+                            <span class="str">"severity"</span>: {<span class="str">"type"</span>: <span class="str">"string"</span>},
+                            <span class="str">"desc"</span>: {<span class="str">"type"</span>: <span class="str">"string"</span>}
+                        }
+                    }
+                }
+            }
+        }
+    }
+)
+
+<span class="cmt"># Access via msg.structured_output</span></pre>
+    </div>
+    <div>
+      <h3>System Prompt Presets</h3>
+<pre><span class="cmt"># Extend Claude Code's built-in prompt</span>
+options <span class="op">=</span> <span class="typ">ClaudeAgentOptions</span>(
+    system_prompt<span class="op">=</span>{
+        <span class="str">"type"</span>: <span class="str">"preset"</span>,
+        <span class="str">"preset"</span>: <span class="str">"claude_code"</span>,
+        <span class="str">"append"</span>: <span class="str">"Always use PEP 8."</span>
+    },
+    setting_sources<span class="op">=</span>[<span class="str">"project"</span>]
+)</pre>
+      <h3 style="margin-top:1.2rem;">Dynamic Agent Factories</h3>
+<pre><span class="kw">def</span> <span class="fn">make_reviewer</span>(level: <span class="typ">str</span>) -> <span class="typ">AgentDefinition</span>:
+    <span class="kw">return</span> <span class="typ">AgentDefinition</span>(
+        description<span class="op">=</span><span class="str">"Security reviewer"</span>,
+        prompt<span class="op">=</span>f<span class="str">"You are a {level} reviewer."</span>,
+        tools<span class="op">=</span>[<span class="str">"Read"</span>, <span class="str">"Grep"</span>, <span class="str">"Glob"</span>],
+        model<span class="op">=</span><span class="str">"opus"</span> <span class="kw">if</span> level <span class="op">==</span> <span class="str">"strict"</span>
+              <span class="kw">else</span> <span class="str">"sonnet"</span>
+    )</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 25 — ERROR HANDLING -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Error Handling &amp; ResultMessage</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Structured Errors</h3>
+<pre><span class="kw">from</span> claude_agent_sdk <span class="kw">import</span> (
+    <span class="typ">CLINotFoundError</span>,
+    <span class="typ">ProcessError</span>,
+    <span class="typ">CLIConnectionError</span>,
+    <span class="typ">CLIJSONDecodeError</span>
+)
+
+<span class="kw">try</span>:
+    <span class="kw">async for</span> msg <span class="kw">in</span> <span class="fn">query</span>(prompt<span class="op">=</span><span class="str">"..."</span>):
+        <span class="fn">print</span>(msg)
+<span class="kw">except</span> <span class="typ">CLINotFoundError</span>:
+    <span class="fn">print</span>(<span class="str">"Install Claude Code first"</span>)
+<span class="kw">except</span> <span class="typ">ProcessError</span> <span class="kw">as</span> e:
+    <span class="fn">print</span>(f<span class="str">"Exit code: {e.exit_code}"</span>)
+    <span class="fn">print</span>(f<span class="str">"stderr: {e.stderr}"</span>)
+<span class="kw">except</span> <span class="typ">CLIJSONDecodeError</span> <span class="kw">as</span> e:
+    <span class="fn">print</span>(f<span class="str">"Bad JSON: {e.line}"</span>)</pre>
+    </div>
+    <div>
+      <h3>ResultMessage Fields</h3>
+      <table>
+        <tr><th>Field</th><th>Type</th></tr>
+        <tr><td><span class="inline-code">result</span></td><td>Final text output</td></tr>
+        <tr><td><span class="inline-code">structured_output</span></td><td>Parsed JSON if output_format set</td></tr>
+        <tr><td><span class="inline-code">is_error</span></td><td>Whether task failed</td></tr>
+        <tr><td><span class="inline-code">session_id</span></td><td>For resuming sessions</td></tr>
+        <tr><td><span class="inline-code">total_cost_usd</span></td><td>Total API spend</td></tr>
+        <tr><td><span class="inline-code">num_turns</span></td><td>Conversation turns used</td></tr>
+        <tr><td><span class="inline-code">duration_ms</span></td><td>Wall-clock time</td></tr>
+        <tr><td><span class="inline-code">duration_api_ms</span></td><td>API-only time</td></tr>
+        <tr><td><span class="inline-code">usage</span></td><td>Token breakdown</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 26 — TOOL COMBINATIONS -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Common Tool Profiles</h2>
+  <div class="divider"></div>
+  <table style="max-width: 900px;">
+    <tr><th>Profile</th><th>Tools</th><th>Use Case</th></tr>
+    <tr>
+      <td><strong class="blue">Read-only analysis</strong></td>
+      <td><span class="inline-code">Read</span> <span class="inline-code">Glob</span> <span class="inline-code">Grep</span></td>
+      <td>Code review, architecture analysis, audits</td>
+    </tr>
+    <tr>
+      <td><strong class="green">Code modification</strong></td>
+      <td><span class="inline-code">Read</span> <span class="inline-code">Edit</span> <span class="inline-code">Write</span> <span class="inline-code">Glob</span> <span class="inline-code">Grep</span></td>
+      <td>Bug fixes, refactoring, feature development</td>
+    </tr>
+    <tr>
+      <td><strong class="purple">Full automation</strong></td>
+      <td><span class="inline-code">Read</span> <span class="inline-code">Edit</span> <span class="inline-code">Write</span> <span class="inline-code">Bash</span> <span class="inline-code">Glob</span> <span class="inline-code">Grep</span></td>
+      <td>CI/CD, deploy pipelines, infrastructure</td>
+    </tr>
+    <tr>
+      <td><strong class="yellow">Research</strong></td>
+      <td><span class="inline-code">Read</span> <span class="inline-code">Glob</span> <span class="inline-code">Grep</span> <span class="inline-code">WebSearch</span> <span class="inline-code">WebFetch</span></td>
+      <td>Documentation, competitive analysis</td>
+    </tr>
+    <tr>
+      <td><strong class="cyan">Multi-agent</strong></td>
+      <td><span class="inline-code">Read</span> <span class="inline-code">Glob</span> <span class="inline-code">Grep</span> <span class="inline-code">Task</span></td>
+      <td>Parallel review, delegated subtasks</td>
+    </tr>
+  </table>
+
+  <div style="margin-top: 1.5rem;">
+    <h3>Least-Privilege Principle</h3>
+    <p>Start with the <strong>minimum tool set</strong>. Add tools only as needed. Combine with <span class="inline-code">permission_mode</span> and <span class="inline-code">hooks</span> for defense in depth.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 27 — RECAP -->
+<!-- ============================================================ -->
+<div class="slide">
+  <h2>Recap: What You Get</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div>
+      <h3>Core API</h3>
+      <ul>
+        <li><span class="inline-code">query()</span> — one-shot agent tasks</li>
+        <li><span class="inline-code">ClaudeSDKClient</span> — multi-turn conversations, hooks, custom tools</li>
+        <li><span class="inline-code">ClaudeAgentOptions</span> — deep configuration surface</li>
+      </ul>
+      <h3 style="margin-top:1rem;">Extension Points</h3>
+      <ul>
+        <li><span class="inline-code">@tool</span> + <span class="inline-code">create_sdk_mcp_server()</span> — custom tools</li>
+        <li><span class="inline-code">AgentDefinition</span> — programmatic subagents</li>
+        <li><span class="inline-code">HookMatcher</span> — lifecycle interception</li>
+        <li><span class="inline-code">can_use_tool</span> — custom authorization</li>
+        <li><span class="inline-code">mcp_servers</span> — external system integration</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Safety &amp; Ops</h3>
+      <ul>
+        <li>4 permission modes: default → bypassPermissions</li>
+        <li>Budget caps, turn limits, tool allow/blocklists</li>
+        <li>Sandbox with network control</li>
+        <li>Structured output via JSON Schema</li>
+        <li>Session resume, fork, and checkpointing</li>
+      </ul>
+      <h3 style="margin-top:1rem;">Ecosystem</h3>
+      <ul>
+        <li>Same engine as Claude Code CLI</li>
+        <li>Bedrock, Vertex AI, Azure Foundry auth</li>
+        <li>Skills, slash commands, plugins, CLAUDE.md</li>
+        <li>Python + TypeScript SDKs</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 28 — RESOURCES -->
+<!-- ============================================================ -->
+<div class="slide title-slide">
+  <h1 style="font-size: 2.6rem;">Get Started</h1>
+  <div class="divider" style="margin: 1rem auto;"></div>
+  <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto;">
+    <span class="inline-code">pip install claude-agent-sdk</span>
+  </p>
+  <div style="margin-top: 2rem; text-align: left; max-width: 550px; margin-left: auto; margin-right: auto;">
+    <ul>
+      <li><strong><a href="https://platform.claude.com/docs/en/agent-sdk/overview" style="color:var(--blue);">SDK Overview</a></strong> — Full documentation</li>
+      <li><strong><a href="https://platform.claude.com/docs/en/agent-sdk/quickstart" style="color:var(--blue);">Quickstart</a></strong> — Bug-fixing agent in minutes</li>
+      <li><strong><a href="https://platform.claude.com/docs/en/agent-sdk/python" style="color:var(--blue);">Python API Reference</a></strong> — All types &amp; classes</li>
+      <li><strong><a href="https://github.com/anthropics/claude-agent-sdk-python" style="color:var(--blue);">GitHub</a></strong> — Source, issues, releases</li>
+      <li><strong><a href="https://github.com/anthropics/claude-agent-sdk-demos" style="color:var(--blue);">Example Agents</a></strong> — Email assistant, research agent</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  function show(n) {
+    if (n < 0 || n >= slides.length) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); show(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); show(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault(); show(0);
+    } else if (e.key === 'End') {
+      e.preventDefault(); show(slides.length - 1);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    const x = e.clientX / window.innerWidth;
+    if (x > 0.3) show(current + 1);
+    else show(current - 1);
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) show(current + 1);
+      else show(current - 1);
+    }
+  });
+
+  show(0);
+})();
+</script>
+</body>
+</html>
