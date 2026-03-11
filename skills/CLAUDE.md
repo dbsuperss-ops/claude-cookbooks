@@ -1,236 +1,150 @@
-# Skills Cookbook - Claude Code Guide
+# Skills 쿡북 - Claude Code 가이드
 
-## Project Overview
+## 프로젝트 개요
 
-This is a comprehensive Jupyter notebook cookbook demonstrating Claude's Skills feature for document generation (Excel, PowerPoint, PDF). It's designed for developers learning to integrate Skills into their applications.
+문서 생성(Excel, PowerPoint, PDF)을 위한 Claude의 스킬(Skills) 기능을 보여주는 종합적인 Jupyter 노트북 쿡북입니다. 자신의 애플리케이션에 스킬을 통합하려는 개발자를 위해 설계되었습니다.
 
-## Quick Start Commands
+## 빠른 시작 명령어
 
-### Environment Setup
+### 환경 설정
 ```bash
-# Create and activate virtual environment
+# 가상 환경 생성 및 활성화
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Install dependencies (MUST use local whl for Skills support)
+# 의존성 설치 (스킬 지원을 위해 반드시 로컬 whl 사용)
 pip install -r requirements.txt
 
-# Configure API key
+# API 키 구성
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# .env 파일을 수정하고 ANTHROPIC_API_KEY를 추가하세요.
 ```
 
-### Running Notebooks
+### 노트북 실행
 ```bash
-# Launch Jupyter
+# Jupyter 실행
 jupyter notebook
 
-# Or use VSCode with Jupyter extension
-# Make sure to select the venv kernel in VSCode: Cmd+Shift+P → "Python: Select Interpreter"
+# 또는 Jupyter 확장이 설치된 VSCode 사용
+# VSCode에서 venv 커널을 선택했는지 확인하세요: Cmd+Shift+P → "Python: Select Interpreter"
 ```
 
-### Testing & Verification
+### 테스트 및 검증
 ```bash
-# Verify environment and SDK version
-python -c "import anthropic; print(f'SDK Version: {anthropic.__version__}')"
+# 환경 및 SDK 버전 확인
+python -c "import anthropic; print(f'SDK 버전: {anthropic.__version__}')"
 
-# Check outputs directory for generated files
+# 생성된 파일이 있는지 outputs/ 디렉토리 확인
 ls -lh outputs/
 ```
 
-## Architecture Overview
+## 아키텍처 개요
 
-### Directory Structure
+### 디렉토리 구조
 ```
 skills/
-├── notebooks/              # 3 progressive Jupyter notebooks
+├── notebooks/              # 3단계의 Jupyter 노트북
 │   ├── 01_skills_introduction.ipynb
-│   ├── 02_skills_financial_applications.ipynb  # WIP
-│   └── 03_skills_custom_development.ipynb      # WIP
-├── sample_data/           # Financial datasets for examples
-├── custom_skills/         # Custom skill development area
-├── outputs/               # Generated files (xlsx, pptx, pdf)
-├── file_utils.py          # Files API helper functions
-└── docs/                  # Implementation tracking
+│   ├── 02_skills_financial_applications.ipynb  # 작업 중 (WIP)
+│   └── 03_skills_custom_development.ipynb      # 작업 중 (WIP)
+├── sample_data/           # 예제용 재무 데이터셋
+├── custom_skills/         # 커스텀 스킬 개발 영역
+├── outputs/               # 생성된 파일들 (xlsx, pptx, pdf)
+├── file_utils.py          # Files API 헬퍼 함수
+└── docs/                  # 구현 추적 문서
 ```
 
-### Key Technical Details
+### 핵심 기술 세부 사항
 
-**Beta API Requirements:**
-- All Skills functionality uses `client.beta.*` namespace
-- Required beta headers: `code-execution-2025-08-25`, `files-api-2025-04-14`, `skills-2025-10-02`
-- Must use `client.beta.messages.create()` with `container` parameter
-- Code execution tool (`code_execution_20250825`) is REQUIRED
-- Use pre-built Agent skills by referencing their `skill_id` or create and upload your own via the Skills API
+**Beta API 요구 사항:**
+- 모든 스킬 기능은 `client.beta.*` 네임스페이스를 사용합니다.
+- 필수 베타 헤더: `code-execution-2025-08-25`, `files-api-2025-04-14`, `skills-2025-10-02`
+- `container` 파라미터와 함께 `client.beta.messages.create()`를 사용해야 합니다.
+- 코드 실행 도구(`code_execution_20250825`)가 필수입니다.
+- 사전 구축된 에이전트 스킬을 `skill_id`로 참조하거나, Skills API를 통해 직접 생성하여 업로드할 수 있습니다.
 
-**Files API Integration:**
-- Skills generate files and return `file_id` attributes
-- Must use `client.beta.files.download()` to download files
-- Must use `client.beta.files.retrieve_metadata()` to get file info
-- Helper functions in `file_utils.py` handle extraction and download
+**Files API 통합:**
+- 스킬은 파일을 생성하고 `file_id` 속성을 반환합니다.
+- 파일을 다운로드하려면 `client.beta.files.download()`를 사용해야 합니다.
+- 파일 정보를 얻으려면 `client.beta.files.retrieve_metadata()`를 사용해야 합니다.
+- `file_utils.py`의 헬퍼 함수들이 추출 및 다운로드를 처리합니다.
 
-**Built-in Skills:**
-- `xlsx` - Excel workbooks with formulas and charts
-- `pptx` - PowerPoint presentations
-- `pdf` - PDF documents
-- `docx` - Word documents
+**내장 스킬:**
+- `xlsx` - 수식과 차트가 포함된 Excel 워크북
+- `pptx` - PowerPoint 프레젠테이션
+- `pdf` - PDF 문서
+- `docx` - Word 문서
 
-## Development Gotchas
+## 개발 시 유의사항 (Gotchas)
 
-### 1. SDK Version
-**Important**: Ensure you have the Anthropic SDK version 0.71.0 or later with Skills support
+### 1. SDK 버전
+**중요**: 스킬 기능을 지원하는 Anthropic SDK 버전 0.71.0 이상이 설치되어 있는지 확인하세요.
 ```bash
 pip install anthropic>=0.71.0
-# Restart Jupyter kernel after installation if upgrading!
+# 업데이트 후에는 Jupyter 커널을 재시작하세요!
 ```
 
-### 2. Beta Namespace Required
-**Problem**: `container` parameter not recognized, files API fails
-**Solution**: Use `client.beta.messages.create()` and `client.beta.files.*`
-```python
-# ❌ Wrong
-response = client.messages.create(container={...})
-content = client.files.content(file_id)
+### 2. Beta 네임스페이스 필수
+- **문제**: `container` 파라미터가 인식되지 않거나 Files API가 실패함
+- **해결책**: `client.beta.messages.create()` 및 `client.beta.files.*`를 사용하세요.
 
-# ✅ Correct
-response = client.beta.messages.create(container={...})
-content = client.beta.files.content(file_id)
-```
+### 3. Beta 헤더 배치
+- **문제**: `default_headers`에 스킬 베타를 설정하면 모든 요청에서 코드 실행이 요구됨
+- **해결책**: 대신 요청마다 `betas` 파라미터를 사용하세요.
 
-### 3. Beta Headers Placement
-**Problem**: Setting Skills beta in default_headers requires code_execution on ALL requests
-**Solution**: Use `betas` parameter per-request instead
-```python
-# ❌ Wrong (affects all requests)
-client = Anthropic(default_headers={"anthropic-beta": "skills-2025-10-02"})
+### 4. File ID 추출
+- **문제**: 응답 구조가 표준 Messages API와 다름
+- **해결책**: 파일 ID는 `bash_code_execution_tool_result.content.content[0].file_id`에 있습니다. `file_utils.extract_file_ids()`를 사용하세요.
 
-# ✅ Correct (per-request)
-response = client.beta.messages.create(
-    betas=["code-execution-2025-08-25", "files-api-2025-04-14", "skills-2025-10-02"],
-    ...
-)
-```
+### 5. Files API 응답 객체
+- **문제**: `'BinaryAPIResponse'` 객체에 `content` 속성이 없거나, `'FileMetadata'` 객체에 `size` 속성이 없음
+- **해결책**: 파일 내용에는 `.read()`를, 파일 크기에는 `.size_bytes`를 사용하세요.
 
-### 4. File ID Extraction
-**Problem**: Response structure differs from standard Messages API
-**Solution**: File IDs in `bash_code_execution_tool_result.content.content[0].file_id`
-```python
-# Use file_utils.extract_file_ids() - handles beta response structure
-from file_utils import extract_file_ids, download_all_files
-file_ids = extract_file_ids(response)
-```
+### 6. Jupyter 커널 선택
+- **문제**: 잘못된 Python 인터프리터 선택으로 인한 의존성 문제
+- **해결책**: VSCode/Jupyter에서 항상 venv 커널을 선택하세요.
 
-### 5. Files API Response Objects
-**Problem**: `'BinaryAPIResponse' object has no attribute 'content'`, `'FileMetadata' object has no attribute 'size'`
-**Solution**: Use `.read()` for file content and `.size_bytes` for file size
-```python
-# ❌ Wrong
-file_content = client.beta.files.download(file_id)
-with open(path, 'wb') as f:
-    f.write(file_content.content)  # No .content attribute!
+### 7. 모듈 리로드 필수
+- **문제**: `file_utils.py`의 변경 내용이 실행 중인 노트북에 반영되지 않음
+- **해결책**: 커널을 재시작하거나 `importlib.reload(file_utils)`를 사용하여 모듈을 다시 로드하세요.
 
-# ✅ Correct
-file_content = client.beta.files.download(file_id)
-with open(path, 'wb') as f:
-    f.write(file_content.read())  # Use .read()
+### 8. 문서 생성 시간
+- **문제**: 파일 생성에 일반적인 API 호출보다 긴 시간이 걸려 사용자가 셀이 멈춘 것으로 오해할 수 있음
+- **실제 관찰된 시간:**
+  - Excel: ~2분
+  - PowerPoint: ~1-2분 (간단한 2-3 슬라이드 기준)
+  - PDF: ~1-2분
+- **해결책**: 파일 생성 셀 앞에 명확한 예상 시간을 안내하세요.
 
-# FileMetadata fields: id, filename, size_bytes (not size), mime_type, created_at, type, downloadable
-metadata = client.beta.files.retrieve_metadata(file_id)
-print(f"Size: {metadata.size_bytes} bytes")  # Use size_bytes, not size
-```
+## 일반적인 작업
 
-### 6. Jupyter Kernel Selection
-**Problem**: Wrong Python interpreter = wrong dependencies
-**Solution**: Always select venv kernel in VSCode/Jupyter
-- VSCode: Cmd+Shift+P → "Python: Select Interpreter" → select venv
-- Jupyter: Kernel → Change Kernel → select venv
+### 새로운 노트북 섹션 추가하기
+1. `01_skills_introduction.ipynb`의 기존 구조를 따르세요.
+2. 임포트와 베타 헤더가 포함된 설정 셀을 포함하세요.
+3. API 호출, 응답 처리, 파일 다운로드 과정을 보여주세요.
+4. 에러 처리 예시를 추가하세요.
 
-### 7. Module Reload Required
-**Problem**: Changes to `file_utils.py` not reflected in running notebooks
-**Solution**: Restart kernel or reload module
-```python
-import importlib
-importlib.reload(file_utils)
-```
+### 샘플 데이터 생성하기
+1. `sample_data/`에 실제와 유사한 재무 데이터를 추가하세요.
+2. 표 형식은 CSV, 구조화된 데이터는 JSON을 사용하세요.
+3. 파일 크기를 적정 수준(<100KB)으로 유지하세요.
 
-### 8. Document Generation Times
-**Problem**: File creation takes longer than typical API calls, users may think cell is frozen
-**Actual Observed Times:**
-- Excel: ~2 minutes
-- PowerPoint: ~1-2 minutes (simple 2-3 slide presentations)
-- PDF: ~1-2 minutes
+### 파일 다운로드 테스트하기
+1. 노트북 셀을 실행하여 파일을 생성합니다.
+2. 응답에서 `file_id`를 확인합니다.
+3. `download_all_files()` 헬퍼를 사용합니다.
+4. `outputs/` 디렉토리에 파일이 있는지 확인하고 실행하여 검증합니다.
 
-**Solution**: Add clear timing expectations before file creation cells
-```markdown
-**⏱️ Note**: Excel generation typically takes 1-2 minutes.
-Be patient - the cell will show [*] while running!
-```
-**Important**: Keep examples simple and focused. Generation times are consistent at 1-2 minutes for well-scoped examples.
+## 리소스
 
-## Common Tasks
-
-### Adding a New Notebook Section
-1. Follow existing structure in `01_skills_introduction.ipynb`
-2. Include setup cell with imports and beta headers
-3. Show API call, response handling, file download
-4. Add error handling examples
-5. Update `docs/skills_cookbook_plan.md` checklist
-
-### Creating Sample Data
-1. Add realistic financial data to `sample_data/`
-2. Use CSV for tabular, JSON for structured
-3. Include headers and proper formatting
-4. Reference in notebook with pandas
-5. Keep file sizes reasonable (<100KB)
-
-### Testing File Download
-1. Run notebook cell to generate file
-2. Check response for file_id
-3. Use `download_all_files()` helper
-4. Verify file in `outputs/` directory
-5. Open file in native app to validate
-
-**Note**: Files are overwritten by default. You'll see `[overwritten]` in the download summary when a file already existed. Set `overwrite=False` to prevent this.
-
-### Debugging API Errors
-1. Check SDK version: `anthropic.__version__` should be `0.69.0`
-2. Verify beta headers are passed per-request
-3. Ensure code_execution tool is included
-4. Check response structure with `print(response)`
-5. Look for error details in `response.stop_reason`
-
-## Testing Checklist
-
-Before committing notebook changes:
-- [ ] Restart kernel and run all cells
-- [ ] Verify all file downloads work
-- [ ] Check outputs/ for generated files
-- [ ] Validate files open correctly in native apps
-- [ ] Update skills_cookbook_plan.md checklist
-- [ ] Test in fresh virtual environment
-
-## Resources
-
-- **API Reference**: https://docs.claude.com/en/api/messages
+- **API 참조**: https://docs.claude.com/en/api/messages
 - **Files API**: https://docs.claude.com/en/api/files-content
-- **Skills Documentation**: https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview
+- **Skills 문서**: https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview
 
-## Project-Specific Notes
+## 환경 변수
 
-- **Focus Domain**: Finance & Analytics with practical business applications
-- **Target Audience**: Intermediate developers and business analysts
-- **Notebook 1**: Complete and tested (file downloads working)
-- **Notebook 2**: Financial Applications - next priority
-- **Notebook 3**: Custom Skills Development - after Notebook 2
-
-## Environment Variables
-
-Required in `.env`:
+`.env` 파일에 필수:
 ```bash
 ANTHROPIC_API_KEY=your-api-key-here
 ```
-
-Optional (for advanced examples):
-```bash
-ANTHROPIC_BASE_URL=https://api.anthropic.com  # If using proxy
-```
+    

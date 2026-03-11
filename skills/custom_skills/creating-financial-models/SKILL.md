@@ -1,173 +1,167 @@
 ---
 name: creating-financial-models
-description: This skill provides an advanced financial modeling suite with DCF analysis, sensitivity testing, Monte Carlo simulations, and scenario planning for investment decisions
+description: 이 스킬은 투자 결정을 위해 DCF 분석, 민감도 테스트, 몬테카를로 시뮬레이션 및 시나리오 플래닝을 포함한 고급 재무 모델링 스위트를 제공합니다.
 ---
 
-# Financial Modeling Suite
+# 재무 모델링 스위트 (Financial Modeling Suite)
 
-A comprehensive financial modeling toolkit for investment analysis, valuation, and risk assessment using industry-standard methodologies.
+업계 표준 방법론을 사용하는 투자 분석, 가치 평가 및 리스크 평가를 위한 종합적인 재무 모델링 툴킷입니다.
 
-## Core Capabilities
+## 핵심 기능
 
-### 1. Discounted Cash Flow (DCF) Analysis
-- Build complete DCF models with multiple growth scenarios
-- Calculate terminal values using perpetuity growth and exit multiple methods
-- Determine weighted average cost of capital (WACC)
-- Generate enterprise and equity valuations
+### 1. 현금흐름 할인법 (DCF) 분석
+- 여러 성장 시나리오가 포함된 완전한 DCF 모델 구축
+- 영구 성장법 및 배수 추출법을 사용하여 최종 가치(Terminal Value) 계산
+- 가중평균자본비용(WACC) 산출
+- 기업 가치 및 자기자본 가치 평가 생성
 
-### 2. Sensitivity Analysis
-- Test key assumptions impact on valuation
-- Create data tables for multiple variables
-- Generate tornado charts for sensitivity ranking
-- Identify critical value drivers
+### 2. 민감도 분석 (Sensitivity Analysis)
+- 주요 가정이 가치 평가에 미치는 영향 테스트
+- 여러 변수에 대한 데이터 테이블 생성
+- 민감도 순위를 위한 토네이도 차트 생성
+- 핵심 가치 동인(Value Drivers) 식별
 
-### 3. Monte Carlo Simulation
-- Run thousands of scenarios with probability distributions
-- Model uncertainty in key inputs
-- Generate confidence intervals for valuations
-- Calculate probability of achieving targets
+### 3. 몬테카를로 시뮬레이션 (Monte Carlo Simulation)
+- 확률 분포를 사용하여 수천 개의 시나리오 실행
+- 주요 입력값의 불확실성 모델링
+- 가치 평가에 대한 신뢰 구간 생성
+- 목표 달성 확률 계산
 
-### 4. Scenario Planning
-- Build best/base/worst case scenarios
-- Model different economic environments
-- Test strategic alternatives
-- Compare outcome probabilities
+### 4. 시나리오 플래닝 (Scenario Planning)
+- 낙관/기본/비관(Best/Base/Worst) 시나리오 구축
+- 다양한 경제 환경 모델링
+- 전략적 대안 테스트
+- 결과 확률 비교
 
-## Input Requirements
+## 입력 요구 사항
 
-### For DCF Analysis
-- Historical financial statements (3-5 years)
-- Revenue growth assumptions
-- Operating margin projections
-- Capital expenditure forecasts
-- Working capital requirements
-- Terminal growth rate or exit multiple
-- Discount rate components (risk-free rate, beta, market premium)
+### DCF 분석용
+- 과거 재무제표 (3-5년)
+- 매출 성장 가정
+- 영업이익률 전망
+- 자본 지출(CapEx) 예측
+- 운전 자본 요구 사항
+- 최종 성장률 또는 종료 배수
+- 할인율 구성 요소 (무위험 수익률, 베타, 시장 프리미엄)
 
-### For Sensitivity Analysis
-- Base case model
-- Variable ranges to test
-- Key metrics to track
+### 민감도 분석용
+- 기본 케이스 모델
+- 테스트할 변수 범위
+- 추적할 핵심 지표
 
-### For Monte Carlo Simulation
-- Probability distributions for uncertain variables
-- Correlation assumptions between variables
-- Number of iterations (typically 1,000-10,000)
+### 몬테카를로 시뮬레이션용
+- 불확실한 변수에 대한 확률 분포
+- 변수 간의 상관관계 가정
+- 반복 횟수 (주로 1,000~10,000회)
 
-### For Scenario Planning
-- Scenario definitions and assumptions
-- Probability weights for scenarios
-- Key performance indicators to track
+### 시나리오 플래닝용
+- 시나리오 정의 및 가정
+- 시나리오별 확률 가중치
+- 추적할 핵심 성과 지표(KPI)
 
-## Output Formats
+## 출력 형식
 
-### DCF Model Output
-- Complete financial projections
-- Free cash flow calculations
-- Terminal value computation
-- Enterprise and equity value summary
-- Valuation multiples implied
-- Excel workbook with full model
+### DCF 모델 출력
+- 완전한 재무 전망
+- 잉여현금흐름(FCF) 계산
+- 최종 가치 산출
+- 기업 가치 및 자기자본 가치 요약
+- 내포된 가치 평가 배수
+- 전체 모델이 포함된 Excel 워크북
 
-### Sensitivity Analysis Output
-- Sensitivity tables showing value ranges
-- Tornado chart of key drivers
-- Break-even analysis
-- Charts showing relationships
+### 민감도 분석 출력
+- 가치 범위를 보여주는 민감도 테이블
+- 핵심 동인에 대한 토네이도 차트
+- 손익분기점 분석
+- 관계를 보여주는 차트
 
-### Monte Carlo Output
-- Probability distribution of valuations
-- Confidence intervals (e.g., 90%, 95%)
-- Statistical summary (mean, median, std dev)
-- Risk metrics (VaR, probability of loss)
+### 몬테카를로 출력
+- 가치 평가의 확률 분포
+- 신뢰 구간 (예: 90%, 95%)
+- 통계적 요약 (평균, 중앙값, 표준편차)
+- 리스크 지표 (VaR, 손실 확률)
 
-### Scenario Planning Output
-- Scenario comparison table
-- Probability-weighted expected values
-- Decision tree visualization
-- Risk-return profiles
+### 시나리오 플래닝 출력
+- 시나리오 비교 테이블
+- 확률 가중 평균 기대값
+- 의사결정 나무(Decision Tree) 시각화
+- 리스크-수익 프로필
 
-## Model Types Supported
+## 지원되는 모델 유형
 
-1. **Corporate Valuation**
-   - Mature companies with stable cash flows
-   - Growth companies with J-curve projections
-   - Turnaround situations
+1. **기업 가치 평가 (Corporate Valuation)**
+   - 안정적인 현금 흐름을 가진 성숙기 기업
+   - J-커브 전망을 가진 성장 기업
+   - 턴어라운드(기업 회생) 상황
 
-2. **Project Finance**
-   - Infrastructure projects
-   - Real estate developments
-   - Energy projects
+2. **프로젝트 파이낸싱 (Project Finance)**
+   - 인프라 프로젝트
+   - 부동산 개발
+   - 에너지 프로젝트
 
-3. **M&A Analysis**
-   - Acquisition valuations
-   - Synergy modeling
-   - Accretion/dilution analysis
+3. **M&A 분석**
+   - 인수 가치 평가
+   - 시너지 모델링
+   - 주당이익 증감(Accretion/Dilution) 분석
 
-4. **LBO Models**
-   - Leveraged buyout analysis
-   - Returns analysis (IRR, MOIC)
-   - Debt capacity assessment
+4. **LBO 모델**
+   - 차입 매수(LBO) 분석
+   - 수익률 분석 (IRR, MOIC)
+   - 부채 상환 능력 평가
 
-## Best Practices Applied
+## 적용되는 최선 관행 (Best Practices)
 
-### Modeling Standards
-- Consistent formatting and structure
-- Clear assumption documentation
-- Separation of inputs, calculations, outputs
-- Error checking and validation
-- Version control and change tracking
+### 모델링 표준
+- 일관된 서식 및 구조
+- 명확한 가정 문서화
+- 입력, 계산, 출력의 분리
+- 오류 확인 및 검증
+- 버전 관리 및 변경 사항 추적
 
-### Valuation Principles
-- Use multiple valuation methods for triangulation
-- Apply appropriate risk adjustments
-- Consider market comparables
-- Validate against trading multiples
-- Document key assumptions clearly
+### 가치 평가 원칙
+- 교차 검증을 위한 여러 가치 평가 방법 사용
+- 적절한 리스크 조정 적용
+- 시장 비교 대상 고려
+- 거래 배수와 대조하여 검증
+- 핵심 가정을 명확하게 문서화
 
-### Risk Management
-- Identify and quantify key risks
-- Use probability-weighted scenarios
-- Stress test extreme cases
-- Consider correlation effects
-- Provide confidence intervals
+### 리스크 관리
+- 핵심 리스크 식별 및 정량화
+- 확률 가중 시나리오 사용
+- 극한 상황에 대한 스트레스 테스트
+- 상관관계 효과 고려
+- 신뢰 구간 제공
 
-## Example Usage
+## 사용 예시
 
-"Build a DCF model for this technology company using the attached financials"
+"첨부된 재무 데이터를 사용하여 이 기술 회사에 대한 DCF 모델을 구축해줘."
 
-"Run a Monte Carlo simulation on this acquisition model with 5,000 iterations"
+"이 인수 모델에 대해 5,000회의 반복 횟수로 몬테카를로 시뮬레이션을 실행해줘."
 
-"Create sensitivity analysis showing impact of growth rate and WACC on valuation"
+"성장률과 WACC가 가치 평가에 미치는 영향을 보여주는 민감도 분석을 만들어줘."
 
-"Develop three scenarios for this expansion project with probability weights"
+"확률 가중치를 적용하여 이 확장 프로젝트에 대한 세 가지 시나리오를 개발해줘."
 
-## Scripts Included
+## 포함된 스크립트
 
-- `dcf_model.py`: Complete DCF valuation engine
-- `sensitivity_analysis.py`: Sensitivity testing framework
+- `dcf_model.py`: 완전한 DCF 가치 평가 엔진
+- `sensitivity_analysis.py`: 민감도 테스트 프레임워크
 
-## Limitations and Disclaimers
+## 제한 사항 및 면책 조항
 
-- Models are only as good as their assumptions
-- Past performance doesn't guarantee future results
-- Market conditions can change rapidly
-- Regulatory and tax changes may impact results
-- Professional judgment required for interpretation
-- Not a substitute for professional financial advice
+- 모델의 결과는 가정의 정확도에 달려 있습니다.
+- 과거의 성과가 미래의 결과를 보장하지 않습니다.
+- 시장 상황은 급격하게 변할 수 있습니다.
+- 규제 및 세제 변경이 결과에 영향을 미칠 수 있습니다.
+- 해석을 위해 전문가의 판단이 필요합니다.
+- 전문적인 재무 자문을 대신할 수 없습니다.
 
-## Quality Checks
+## 품질 확인
 
-The model automatically performs:
-1. Balance sheet balancing checks
-2. Cash flow reconciliation
-3. Circular reference resolution
-4. Sensitivity bound checking
-5. Statistical validation of Monte Carlo results
-
-## Updates and Maintenance
-
-- Models use latest financial theory and practices
-- Regular updates for market parameter defaults
-- Incorporation of regulatory changes
-- Continuous improvement based on usage patterns
+모델은 다음 사항을 자동으로 수행합니다:
+1. 대차대조표 균형 확인
+2. 현금 흐름 조정
+3. 순환 참조 해결
+4. 민감도 범위 확인
+5. 몬테카를로 결과의 통계적 검증
+    

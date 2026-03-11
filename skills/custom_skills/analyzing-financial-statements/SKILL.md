@@ -1,69 +1,70 @@
 ---
 name: analyzing-financial-statements
-description: This skill calculates key financial ratios and metrics from financial statement data for investment analysis
+description: 이 스킬은 투자 분석을 위해 재무제표 데이터에서 핵심 재무 비율과 지표를 계산합니다.
 ---
 
-# Financial Ratio Calculator Skill
+# 재무 비율 계산기 스킬 (Financial Ratio Calculator Skill)
 
-This skill provides comprehensive financial ratio analysis for evaluating company performance, profitability, liquidity, and valuation.
+이 스킬은 회사의 성과, 수익성, 유동성 및 가치 평가를 평가하기 위한 종합적인 재무 비율 분석을 제공합니다.
 
-## Capabilities
+## 기능
 
-Calculate and interpret:
-- **Profitability Ratios**: ROE, ROA, Gross Margin, Operating Margin, Net Margin
-- **Liquidity Ratios**: Current Ratio, Quick Ratio, Cash Ratio
-- **Leverage Ratios**: Debt-to-Equity, Interest Coverage, Debt Service Coverage
-- **Efficiency Ratios**: Asset Turnover, Inventory Turnover, Receivables Turnover
-- **Valuation Ratios**: P/E, P/B, P/S, EV/EBITDA, PEG
-- **Per-Share Metrics**: EPS, Book Value per Share, Dividend per Share
+다음을 계산하고 해석합니다:
+- **수익성 비율**: ROE(자기자본이익률), ROA(총자산이익률), 매출총이익률, 영업이익률, 순이익률
+- **유동성 비율**: 유동비율, 당좌비율, 현금비율
+- **레버리지 비율**: 부채비율, 이자보상배율, 부채상환계수
+- **효율성 비율**: 자산회전율, 재고자산회전율, 매출채권회전율
+- **가치평가 비율**: P/E(주가수익비율), P/B(주가순자산비율), P/S(주가매출비율), EV/EBITDA, PEG
+- **주당 지표**: EPS(주당순이익), 주당순자산(BPS), 주당배당금(DPS)
 
-## How to Use
+## 사용 방법
 
-1. **Input Data**: Provide financial statement data (income statement, balance sheet, cash flow)
-2. **Select Ratios**: Specify which ratios to calculate or use "all" for comprehensive analysis
-3. **Interpretation**: The skill will calculate ratios and provide industry-standard interpretations
+1. **데이터 입력**: 재무제표 데이터(손익계산서, 대차대조표, 현금흐름표)를 제공합니다.
+2. **비율 선택**: 계산할 비율을 지정하거나 종합 분석을 위해 "모두(all)"를 사용합니다.
+3. **해석**: 스킬이 비율을 계산하고 업계 표준 해석을 제공합니다.
 
-## Input Format
+## 입력 형식
 
-Financial data can be provided as:
-- CSV with financial line items
-- JSON with structured financial statements
-- Text description of key financial figures
-- Excel files with financial statements
+재무 데이터는 다음과 같이 제공될 수 있습니다:
+- 재무 항목이 포함된 CSV
+- 구조화된 재무제표가 포함된 JSON
+- 핵심 재무 수치의 텍스트 설명
+- 재무제표가 포함된 Excel 파일
 
-## Output Format
+## 출력 형식
 
-Results include:
-- Calculated ratios with values
-- Industry benchmark comparisons (when available)
-- Trend analysis (if multiple periods provided)
-- Interpretation and insights
-- Excel report with formatted results
+결과에는 다음이 포함됩니다:
+- 수치가 포함된 계산된 비율
+- 업계 벤치마크 비교 (가능한 경우)
+- 추세 분석 (여러 기간이 제공된 경우)
+- 해석 및 통찰력
+- 서식이 지정된 결과가 포함된 Excel 보고서
 
-## Example Usage
+## 사용 예시
 
-"Calculate key financial ratios for this company based on the attached financial statements"
+"첨부된 재무제표를 바탕으로 이 회사의 핵심 재무 비율을 계산해줘."
 
-"What's the P/E ratio if the stock price is $50 and annual earnings are $2.50 per share?"
+"주가가 50달러이고 연간 이익이 주당 2.50달러일 때 P/E 비율은 얼마야?"
 
-"Analyze the liquidity position using the balance sheet data"
+"대차대조표 데이터를 사용하여 유동성 상태를 분석해줘."
 
-## Scripts
+## 스크립트
 
-- `calculate_ratios.py`: Main calculation engine for all financial ratios
-- `interpret_ratios.py`: Provides interpretation and benchmarking
+- `calculate_ratios.py`: 모든 재무 비율을 위한 메인 계산 엔진
+- `interpret_ratios.py`: 해석 및 벤치마킹 제공
 
-## Best Practices
+## 최선의 관행 (Best Practices)
 
-1. Always validate data completeness before calculations
-2. Handle missing values appropriately (use industry averages or exclude)
-3. Consider industry context when interpreting ratios
-4. Include period comparisons for trend analysis
-5. Flag unusual or concerning ratios
+1. 계산 전상상 데이터의 완결성을 검증하십시오.
+2. 누락된 값은 적절하게 처리하십시오 (업계 평균 사용 또는 제외).
+3. 비율을 해석할 때 업계 맥락을 고려하십시오.
+4. 추세 분석을 위해 기간별 비교를 포함하십시오.
+5. 비정상적이거나 우려되는 비율은 표시(flag)하십시오.
 
-## Limitations
+## 제한 사항
 
-- Requires accurate financial data
-- Industry benchmarks are general guidelines
-- Some ratios may not apply to all industries
-- Historical data doesn't guarantee future performance
+- 정확한 재무 데이터가 필요합니다.
+- 업계 벤치마크는 일반적인 가이드라인입니다.
+- 일부 비율은 모든 산업에 적용되지 않을 수 있습니다.
+- 과거 데이터가 미래의 성과를 보장하지 않습니다.
+    

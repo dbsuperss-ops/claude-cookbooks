@@ -1,137 +1,138 @@
-# Brand Guidelines Reference
+# 브랜드 가이드라인 참조 (Brand Guidelines Reference)
 
-## Quick Reference Card
+## 빠른 참조 카드
 
-### Must-Have Elements
-✅ Company logo on first page/slide
-✅ Correct brand colors (no variations)
-✅ Approved fonts only
-✅ Consistent formatting throughout
-✅ Professional tone of voice
+### 필수 포함 요소
+✅ 첫 페이지/슬라이드에 회사 로고 포함
+✅ 정확한 브랜드 색상 사용 (변형 금지)
+✅ 승인된 폰트만 사용
+✅ 문서 전체에 일관된 서식 유지
+✅ 전문적인 어조(Tone of Voice) 사용
 
-### Never Use
-❌ Competitor logos or references
-❌ Unapproved colors or gradients
-❌ Decorative or script fonts
-❌ Pixelated or stretched logos
-❌ Informal language or slang
+### 절대 금지 요소
+❌ 경쟁사 로고 또는 언급 금지
+❌ 승인되지 않은 색상이나 그라데이션 사용 금지
+❌ 장식용 또는 필기체 폰트 사용 금지
+❌ 깨지거나(pixelated) 늘어난 로고 사용 금지
+❌ 비격식적인 언어나 속어 사용 금지
 
-## Color Codes Reference
+## 색상 코드 참조
 
-### For Digital (RGB/Hex)
-| Color Name | Hex Code | RGB | Usage |
+### 디지털용 (RGB/Hex)
+| 색상명 | Hex 코드 | RGB | 용도 |
 |------------|----------|-----|-------|
-| Acme Blue | #0066CC | 0, 102, 204 | Primary headers, CTAs |
-| Acme Navy | #003366 | 0, 51, 102 | Body text, secondary |
-| Success Green | #28A745 | 40, 167, 69 | Positive values |
-| Warning Amber | #FFC107 | 255, 193, 7 | Warnings, attention |
-| Error Red | #DC3545 | 220, 53, 69 | Errors, negative |
-| Neutral Gray | #6C757D | 108, 117, 125 | Muted text |
-| Light Gray | #F8F9FA | 248, 249, 250 | Backgrounds |
+| Acme Blue | #0066CC | 0, 102, 204 | 기본 헤더, CTA |
+| Acme Navy | #003366 | 0, 51, 102 | 본문 텍스트, 보조 |
+| Success Green | #28A745 | 40, 167, 69 | 긍정 수치 |
+| Warning Amber | #FFC107 | 255, 193, 7 | 경고, 주의 |
+| Error Red | #DC3545 | 220, 53, 69 | 에러, 부정 수치 |
+| Neutral Gray | #6C757D | 108, 117, 125 | 차분한 텍스트 |
+| Light Gray | #F8F9FA | 248, 249, 250 | 배경색 |
 
-### For Print (CMYK)
-| Color Name | CMYK | Pantone |
+### 인쇄용 (CMYK)
+| 색상명 | CMYK | Pantone |
 |------------|------|---------|
 | Acme Blue | 100, 50, 0, 20 | 2935 C |
 | Acme Navy | 100, 50, 0, 60 | 2965 C |
 
-## Document Templates
+## 문서 템플릿
 
-### Email Signature
+### 이메일 서명
 ```
-[Name]
-[Title]
+[이름]
+[직함]
 Acme Corporation | Innovation Through Excellence
-[Phone] | [Email]
+[전화번호] | [이메일]
 www.acmecorp.example
 ```
 
-### Slide Footer
+### 슬라이드 푸터 (Slide Footer)
 ```
-© 2025 Acme Corporation | Confidential | Page [X]
-```
-
-### Report Header
-```
-[Logo]     [Document Title]     Page [X] of [Y]
+© 2025 Acme Corporation | Confidential | [X]페이지
 ```
 
-## Accessibility Standards
-
-### Color Contrast
-- Text on white background: Use Acme Navy (#003366)
-- Text on blue background: Use white (#FFFFFF)
-- Minimum contrast ratio: 4.5:1 for body text
-- Minimum contrast ratio: 3:1 for large text
-
-### Font Sizes
-- Minimum body text: 11pt (print), 14px (digital)
-- Minimum caption text: 9pt (print), 12px (digital)
-
-## File Naming Conventions
-
-### Standard Format
+### 보고서 헤더 (Report Header)
 ```
-YYYY-MM-DD_DocumentType_Version_Status.ext
+[로고]     [문서 제목]     [Y]페이지 중 [X]페이지
 ```
 
-### Examples
-- `2025-01-15_QuarterlyReport_v2_FINAL.pptx`
-- `2025-01-15_BudgetAnalysis_v1_DRAFT.xlsx`
-- `2025-01-15_Proposal_v3_APPROVED.pdf`
+## 접근성 표준
 
-## Common Mistakes to Avoid
+### 색상 대비
+- 흰색 배경 위 텍스트: Acme Navy (#003366) 사용
+- 파란색 배경 위 텍스트: 흰색 (#FFFFFF) 사용
+- 최소 대비율: 본문 텍스트 4.5:1
+- 최소 대비율: 큰 텍스트 3:1
 
-1. **Wrong Blue**: Using generic blue instead of Acme Blue #0066CC
-2. **Stretched Logo**: Always maintain aspect ratio
-3. **Too Many Colors**: Stick to the approved palette
-4. **Inconsistent Fonts**: Don't mix font families
-5. **Missing Logo**: Always include on first page
-6. **Wrong Date Format**: Use "Month DD, YYYY"
-7. **Decimal Places**: Be consistent (currency: 2, percentage: 1)
+### 폰트 크기
+- 최소 본문 텍스트: 11pt (인쇄), 14px (디지털)
+- 최소 캡션 텍스트: 9pt (인쇄), 12px (디지털)
 
-## Department-Specific Guidelines
+## 파일 명명 규칙 (File Naming Conventions)
 
-### Finance
-- Always right-align numbers in tables
-- Use parentheses for negative values: ($1,234)
-- Include data source citations
+### 표준 형식
+```
+YYYY-MM-DD_문서유형_버전_상태.ext
+```
 
-### Marketing
-- Can use full secondary color palette
-- May include approved imagery
-- Follow social media specific guidelines when applicable
+### 예시
+- `2025-01-15_분기보고서_v2_최종(FINAL).pptx`
+- `2025-01-15_예산분석_v1_초안(DRAFT).xlsx`
+- `2025-01-15_제안서_v3_승인(APPROVED).pdf`
 
-### Legal
-- Use numbered sections (1.0, 1.1, 1.2)
-- Include document control information
-- Apply "Confidential" watermark when needed
+## 피해야 할 일반적인 실수
 
-## International Considerations
+1. **잘못된 파란색**: Acme Blue(#0066CC) 대신 일반 파란색 사용
+2. **늘어난 로고**: 항상 가로세로 비율 유지
+3. **지나치게 많은 색상**: 승인된 팔레트만 고수
+4. **일관성 없는 폰트**: 여러 폰트 패밀리 혼용 금지
+5. **로고 누락**: 항상 첫 페이지에 포함
+6. **잘못된 날짜 형식**: "YYYY년 MM월 DD일" 형식 사용 (변형 가능)
+7. **소수점 자리**: 일관성 유지 (통화: 2자리, 백분율: 1자리)
 
-### Date Formats by Region
-- **US**: Month DD, YYYY (January 15, 2025)
-- **UK**: DD Month YYYY (15 January 2025)
+## 부서별 가이드라인
+
+### 재무 (Finance)
+- 표에서 숫자는 항상 오른쪽 정렬
+- 음수 수치는 괄호 사용: ($1,234)
+- 데이터 소스 인용 포함
+
+### 마케팅 (Marketing)
+- 보조 색상 팔레트 전체 사용 가능
+- 승인된 이미지 포함 가능
+- 소셜 미디어 전용 가이드라인 준수
+
+### 법무 (Legal)
+- 번호가 매겨진 섹션 사용 (1.0, 1.1, 1.2 등)
+- 문서 제어 정보 포함
+- 필요한 경우 "Confidential" 워터마크 적용
+
+## 국제적 고려 사항
+
+### 지역별 날짜 형식
+- **미국(US)**: 월 일, 연도 (January 15, 2025)
+- **영국(UK)**: 일 월 연도 (15 January 2025)
 - **ISO**: YYYY-MM-DD (2025-01-15)
 
-### Currency Display
+### 통화 표시
 - **USD**: $1,234.56
 - **EUR**: €1.234,56
 - **GBP**: £1,234.56
 
-## Version History
+## 버전 히스토리
 
-| Version | Date | Changes |
+| 버전 | 날짜 | 변경 사항 |
 |---------|------|---------|
-| 2.0 | Jan 2025 | Added digital color codes |
-| 1.5 | Oct 2024 | Updated font guidelines |
-| 1.0 | Jan 2024 | Initial brand guidelines |
+| 2.0 | 2025년 1월 | 디지털 색상 코드 추가 |
+| 1.5 | 2024년 10월 | 폰트 가이드라인 업데이트 |
+| 1.0 | 2024년 1월 | 초기 브랜드 가이드라인 수립 |
 
-## Contact for Questions
+## 문의처
 
-**Brand Team**
-Email: brand@acmecorp.example
+**브랜드 팀**
+이메일: brand@acmecorp.example
 Slack: #brand-guidelines
 
-**For Exceptions**
-Submit request to brand team with business justification
+**예외 사항**
+비즈니스 타당성 입증 자료와 함께 브랜드 팀에 요청 제출
+    

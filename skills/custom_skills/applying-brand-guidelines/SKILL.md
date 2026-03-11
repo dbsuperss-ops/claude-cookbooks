@@ -1,171 +1,172 @@
 ---
 name: applying-brand-guidelines
-description: This skill applies consistent corporate branding and styling to all generated documents including colors, fonts, layouts, and messaging
+description: 이 스킬은 색상, 글꼴, 레이아웃 및 메시지를 포함하여 생성된 모든 문서에 일관된 기업 브랜딩 및 스타일을 적용합니다.
 ---
 
-# Corporate Brand Guidelines Skill
+# 기업 브랜드 가이드라인 스킬 (Corporate Brand Guidelines Skill)
 
-This skill ensures all generated documents adhere to corporate brand standards for consistent, professional communication.
+이 스킬은 생성된 모든 문서가 일관되고 전문적인 커뮤니케이션을 위해 기업 브랜드 표준을 준수하도록 보장합니다.
 
-## Brand Identity
+## 브랜드 아이덴티티
 
-### Company: Acme Corporation
-**Tagline**: "Innovation Through Excellence"
-**Industry**: Technology Solutions
+### 회사명: Acme Corporation
+**슬로건**: "Innovation Through Excellence" (탁월함을 통한 혁신)
+**산업 분야**: 기술 솔루션
 
-## Visual Standards
+## 시각적 표준
 
-### Color Palette
+### 색상 팔레트
 
-**Primary Colors**:
-- **Acme Blue**: #0066CC (RGB: 0, 102, 204) - Headers, primary buttons
-- **Acme Navy**: #003366 (RGB: 0, 51, 102) - Text, accents
-- **White**: #FFFFFF - Backgrounds, reverse text
+**기본 색상**:
+- **Acme Blue**: #0066CC (RGB: 0, 102, 204) - 헤더, 주요 버튼
+- **Acme Navy**: #003366 (RGB: 0, 51, 102) - 텍스트, 강조색
+- **흰색**: #FFFFFF - 배경, 반전 텍스트
 
-**Secondary Colors**:
-- **Success Green**: #28A745 (RGB: 40, 167, 69) - Positive metrics
-- **Warning Amber**: #FFC107 (RGB: 255, 193, 7) - Cautions
-- **Error Red**: #DC3545 (RGB: 220, 53, 69) - Negative values
-- **Neutral Gray**: #6C757D (RGB: 108, 117, 125) - Secondary text
+**보조 색상**:
+- **Success Green**: #28A745 (RGB: 40, 167, 69) - 긍정적 지표
+- **Warning Amber**: #FFC107 (RGB: 255, 193, 7) - 주의 사항
+- **Error Red**: #DC3545 (RGB: 220, 53, 69) - 부정적 수치
+- **Neutral Gray**: #6C757D (RGB: 108, 117, 125) - 보조 텍스트
 
-### Typography
+### 타이포그래피 (Typography)
 
-**Primary Font Family**: Segoe UI, system-ui, -apple-system, sans-serif
+**기본 글꼴 패밀리**: Segoe UI, system-ui, -apple-system, sans-serif
 
-**Font Hierarchy**:
-- **H1**: 32pt, Bold, Acme Blue
-- **H2**: 24pt, Semibold, Acme Navy
-- **H3**: 18pt, Semibold, Acme Navy
-- **Body**: 11pt, Regular, Acme Navy
-- **Caption**: 9pt, Regular, Neutral Gray
+**글꼴 계층 구조**:
+- **H1**: 32pt, 굵게(Bold), Acme Blue
+- **H2**: 24pt, 세미볼드(Semibold), Acme Navy
+- **H3**: 18pt, 세미볼드(Semibold), Acme Navy
+- **본문**: 11pt, 보통(Regular), Acme Navy
+- **캡션**: 9pt, 보통(Regular), Neutral Gray
 
-### Logo Usage
+### 로고 사용법
 
-- Position: Top-left corner on first page/slide
-- Size: 120px width (maintain aspect ratio)
-- Clear space: Minimum 20px padding on all sides
-- Never distort, rotate, or apply effects
+- 위치: 첫 페이지/슬라이드의 왼쪽 상단 모서리
+- 크기: 너비 120px (가로세로 비율 유지)
+- 여백: 모든 면에 최소 20px의 패딩 유지
+- 절대 왜곡, 회전 또는 효과를 적용하지 말 것
 
-## Document Standards
+## 문서 표준
 
-### PowerPoint Presentations
+### PowerPoint 프레젠테이션
 
-**Slide Templates**:
-1. **Title Slide**: Company logo, presentation title, date, presenter
-2. **Section Divider**: Section title with blue background
-3. **Content Slide**: Title bar with blue background, white content area
-4. **Data Slide**: For charts/graphs, maintain color palette
+**슬라이드 템플릿**:
+1. **제목 슬라이드**: 회사 로고, 프레젠테이션 제목, 날짜, 발표자
+2. **섹션 구분선**: 파란색 배경의 섹션 제목
+3. **콘텐츠 슬라이드**: 파란색 배경의 제목 표시줄, 흰색 콘텐츠 영역
+4. **데이터 슬라이드**: 차트/그래프용, 브랜드 팔레트 유지
 
-**Layout Rules**:
-- Margins: 0.5 inches all sides
-- Title position: Top 15% of slide
-- Bullet indentation: 0.25 inches per level
-- Maximum 6 bullet points per slide
-- Charts use brand colors exclusively
+**레이아웃 규칙**:
+- 여백: 모든 면에서 0.5인치
+- 제목 위치: 슬라이드 상단 15% 영역
+- 글머리 기호 들여쓰기: 수준당 0.25인치
+- 슬라이드당 최대 6개의 글머리 기호
+- 차트에는 브랜드 색상만 사용
 
-### Excel Spreadsheets
+### Excel 스프레드시트
 
-**Formatting Standards**:
-- **Headers**: Row 1, Bold, White text on Acme Blue background
-- **Subheaders**: Bold, Acme Navy text
-- **Data cells**: Regular, Acme Navy text
-- **Borders**: Thin, Neutral Gray
-- **Alternating rows**: Light gray (#F8F9FA) for readability
+**서식 표준**:
+- **헤더**: 1행, 굵게(Bold), Acme Blue 배경에 흰색 텍스트
+- **하위 헤더**: 굵게(Bold), Acme Navy 텍스트
+- **데이터 셀**: 보통(Regular), Acme Navy 텍스트
+- **테두리**: 가늘게, Neutral Gray
+- **줄 무늬**: 가독성을 위해 연한 회색(#F8F9FA) 교차 적용
 
-**Chart Defaults**:
-- Primary series: Acme Blue
-- Secondary series: Success Green
-- Gridlines: Neutral Gray, 0.5pt
-- No 3D effects or gradients
+**차트 기본값**:
+- 기본 시리즈: Acme Blue
+- 보조 시리즈: Success Green
+- 그리드선: Neutral Gray, 0.5pt
+- 3D 효과나 그라데이션 금지
 
-### PDF Documents
+### PDF 문서
 
-**Page Layout**:
-- **Header**: Company logo left, document title center, page number right
-- **Footer**: Copyright notice left, date center, classification right
-- **Margins**: 1 inch all sides
-- **Line spacing**: 1.15
-- **Paragraph spacing**: 12pt after
+**페이지 레이아웃**:
+- **헤더**: 왼쪽 회사 로고, 중앙 문서 제목, 오른쪽 페이지 번호
+- **푸터**: 왼쪽 저작권 고지, 중앙 날짜, 오른쪽 분류(Classification)
+- **여백**: 모든 면에서 1인치
+- **줄 간격**: 1.15
+- **단락 간격**: 단락 후 12pt
 
-**Section Formatting**:
-- Main headings: Acme Blue, 16pt, bold
-- Subheadings: Acme Navy, 14pt, semibold
-- Body text: Acme Navy, 11pt, regular
+**섹션 서식**:
+- 주요 제목: Acme Blue, 16pt, 굵게
+- 하위 제목: Acme Navy, 14pt, 세미볼드
+- 본문 텍스트: Acme Navy, 11pt, 보통
 
-## Content Guidelines
+## 콘텐츠 가이드라인
 
-### Tone of Voice
+### 어조 (Tone of Voice)
 
-- **Professional**: Formal but approachable
-- **Clear**: Avoid jargon, use simple language
-- **Active**: Use active voice, action-oriented
-- **Positive**: Focus on solutions and benefits
+- **전문적(Professional)**: 격식을 갖추되 다가가기 쉬운 어조
+- **명확함(Clear)**: 전문 용어를 피하고 간단한 언어 사용
+- **능동적(Active)**: 능동태 사용, 행동 지향적
+- **긍정적(Positive)**: 해결책과 이점에 집중
 
-### Standard Phrases
+### 표준 문구
 
-**Opening Statements**:
+**도입부**:
 - "At Acme Corporation, we..."
 - "Our commitment to innovation..."
 - "Delivering excellence through..."
 
-**Closing Statements**:
+**맺음말**:
 - "Thank you for your continued partnership."
 - "We look forward to serving your needs."
 - "Together, we achieve excellence."
 
-### Data Presentation
+### 데이터 제시 방식
 
-**Numbers**:
-- Use comma separators for thousands
-- Currency: $X,XXX.XX format
-- Percentages: XX.X% (one decimal)
-- Dates: Month DD, YYYY
+**숫자**:
+- 천 단위 구분 쉼표(,) 사용
+- 통화: $X,XXX.XX 형식
+- 백분율: XX.X% (소수점 한 자리)
+- 날짜: YYYY년 MM월 DD일
 
-**Tables**:
-- Headers in brand blue
-- Alternating row colors
-- Right-align numbers
-- Left-align text
+**표**:
+- 브랜드 블루 색상의 헤더
+- 교차 행 색상 적용
+- 숫자 오른쪽 정렬
+- 텍스트 왼쪽 정렬
 
-## Quality Standards
+## 품질 표준
 
-### Before Finalizing
+### 최종 확정 전 확인 사항
 
-Always ensure:
-1. Logo is properly placed and sized
-2. All colors match brand palette exactly
-3. Fonts are consistent throughout
-4. No typos or grammatical errors
-5. Data is accurately presented
-6. Professional tone maintained
+항상 다음을 확인하십시오:
+1. 로고가 적절한 위치와 크기로 배치되었는가
+2. 모든 색상이 브랜드 팔레트와 정확히 일치하는가
+3. 글꼴이 전체적으로 일관된가
+4. 오타나 문법 오류가 없는가
+5. 데이터가 정확하게 제시되었는가
+6. 전문적인 어조가 유지되었는가
 
-### Prohibited Elements
+### 금지 요소
 
-Never use:
-- Clip art or stock photos without approval
-- Comic Sans, Papyrus, or decorative fonts
-- Rainbow colors or gradients
-- Animations or transitions (unless specified)
-- Competitor branding or references
+절대 사용 금지:
+- 승인되지 않은 클립아트나 스톡 사진
+- Comic Sans, Papyrus 또는 장식용 글꼴
+- 무지개 색상이나 그라데이션
+- 애니메이션이나 전환 효과 (별도 지정이 없는 한)
+- 경쟁사 브랜딩이나 언급
 
-## Application Instructions
+## 적용 지침
 
-When creating any document:
-1. Start with brand colors and fonts
-2. Apply appropriate template structure
-3. Include logo on first page/slide
-4. Use consistent formatting throughout
-5. Review against brand standards
-6. Ensure professional appearance
+문서 작성 시:
+1. 브랜드 색상과 글꼴로 시작하십시오.
+2. 적절한 템플릿 구조를 적용하십시오.
+3. 첫 페이지/슬라이드에 로고를 포함하십시오.
+4. 문서 전체에 일관된 서식을 사용하십시오.
+5. 브랜드 표준과 대조하여 검토하십시오.
+6. 전문적인 외관을 보장하십시오.
 
-## Scripts
+## 스크립트
 
-- `apply_brand.py`: Automatically applies brand formatting to documents
-- `validate_brand.py`: Checks documents for brand compliance
+- `apply_brand.py`: 문서에 브랜드 서식을 자동으로 적용합니다.
+- `validate_brand.py`: 문서의 브랜드 준수 여부를 확인합니다.
 
-## Notes
+## 참고 사항
 
-- These guidelines apply to all external communications
-- Internal documents may use simplified formatting
-- Special projects may have exceptions (request approval)
-- Brand guidelines updated quarterly - check for latest version
+- 이 가이드라인은 모든 외부 커뮤니케이션에 적용됩니다.
+- 내부 문서는 간소화된 서식을 사용할 수 있습니다.
+- 특수 프로젝트에는 예외가 있을 수 있습니다 (승인 요청 필요).
+- 브랜드 가이드라인은 분기별로 업데이트되므로 최신 버전을 확인하십시오.
+    

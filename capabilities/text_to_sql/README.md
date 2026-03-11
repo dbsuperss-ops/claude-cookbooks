@@ -1,11 +1,12 @@
-# Text-to-SQL with Claude
+# Claude를 이용한 Text-to-SQL (Text-to-SQL with Claude)
 
-Learn how to generate complex SQL queries from natural language using prompting techniques, self-improvement, and RAG.
+프롬프트 기술, 자기 개선(self-improvement) 및 검색 증강 생성(RAG)을 사용하여 자연어로부터 복잡한 SQL 쿼리를 생성하는 방법을 배웁니다.
 
-## Contents
+## 구성 내용
 
-- `guide.ipynb`: Main tutorial notebook
-- `data/`: Data files for examples and testing
-- `evaluation/`: Evaluation scripts using Promptfoo
+- `guide.ipynb`: 주요 튜토리얼 노트북
+- `data/`: 예제 및 테스트를 위한 데이터 파일
+- `evaluation/`: Promptfoo를 사용한 평가 스크립트
 
-For evaluation instructions, see `evaluation/README.md`.
+평가 지침은 `evaluation/README.md`를 참조하십시오.
+    

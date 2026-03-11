@@ -1,132 +1,145 @@
-# Building Powerful Agents with the Claude Agent SDK
+# Claude Agent SDK를 이용한 강력한 에이전트 구축하기
 
-A tutorial series demonstrating how to build sophisticated general-purpose agentic systems using the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python), progressing from simple research agents to multi-agent orchestration with external system integration.
+[Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python)를 사용하여 정교한 범용 에이전트 시스템을 구축하는 방법을 보여주는 튜토리얼 시리즈입니다. 단순한 리서치 에이전트부터 외부 시스템 통합을 포함한 멀티 에이전트 오케스트레이션까지 단계별로 진행합니다.
 
-## Getting Started
+## 시작하기
 
-#### 1. Install uv, [node](https://nodejs.org/en/download/), and the Claude Code CLI (if you haven't already)
+#### 1. uv, [node](https://nodejs.org/en/download/) 및 Claude Code CLI 설치 (아직 설치하지 않은 경우)
 
-```curl -LsSf https://astral.sh/uv/install.sh | sh ```
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-```npm install -g @anthropic-ai/claude-code```
+```bash
+npm install -g @anthropic-ai/claude-code
+```
 
-#### 2. Clone and set up the project
+#### 2. 프로젝트 클론 및 설정
 
-```git clone https://github.com/anthropics/anthropic-cookbook.git ```
+```bash
+git clone https://github.com/anthropics/anthropic-cookbook.git 
+```
 
-```cd anthropic-cookbook/claude_agent_sdk```
+```bash
+cd anthropic-cookbook/claude_agent_sdk
+```
 
-```uv sync ```
+```bash
+uv sync 
+```
 
-#### 3. Register venv as Jupyter kernel so that you can use it in the notebooks
+#### 3. 노트북에서 사용할 수 있도록 가상 환경을 Jupyter 커널로 등록
 
-```uv run python -m ipykernel install --user --name="cc-sdk-tutorial" --display-name "Python (cc-sdk-tutorial)" ```
+```bash
+uv run python -m ipykernel install --user --name="cc-sdk-tutorial" --display-name "Python (cc-sdk-tutorial)" 
+```
 
-#### 4. Claude API Key
-1. Visit [platform.claude.ai](https://platform.claude.ai/dashboard)
-2. Sign up or log in to your account
-3. Click on "Get API keys"
-4. Copy the key and paste it into your `.env` file as ```ANTHROPIC_API_KEY=```
+#### 4. Claude API 키 설정
+1. [platform.claude.ai](https://platform.claude.ai/dashboard) 방문
+2. 가입 또는 로그인
+3. "Get API keys" 클릭
+4. 키를 복사하여 `.env` 파일에 `ANTHROPIC_API_KEY=` 형식으로 붙여넣기
 
-#### 5. GitHub Token for Notebook 02
-If you plan to work through the Observability Agent notebook:
-1. Get a GitHub Personal Access Token [here](https://github.com/settings/personal-access-tokens/new)
-2. Select "Fine-grained" token with default options (public repos, no account permissions)
-3. Add it to your `.env` file as `GITHUB_TOKEN="<token>"`
-4. Ensure [Docker](https://www.docker.com/products/docker-desktop/) is running on your machine
+#### 5. 노트북 02를 위한 GitHub 토큰 설정
+Observability Agent 노트북을 진행할 계획이라면:
+1. [여기](https://github.com/settings/personal-access-tokens/new)에서 GitHub Personal Access Token을 발급받으세요.
+2. 기본 옵션(공개 레포지토리, 계정 권한 없음)으로 "Fine-grained"형 토큰을 선택하세요.
+3. `.env` 파일에 `GITHUB_TOKEN="<token>"` 형식으로 추가하세요.
+4. 머신에서 [Docker](https://www.docker.com/products/docker-desktop/)가 실행 중인지 확인하세요.
 
-## Tutorial Series Overview
+## 튜토리얼 시리즈 개요
 
-This tutorial series takes you on a journey from basic agent implementation to sophisticated multi-agent systems capable of handling real-world complexity. Each notebook builds upon the previous one, introducing new concepts and capabilities while maintaining practical, production-ready implementations.
+이 튜토리얼 시리즈는 기본 에이전트 구현부터 실제 세계의 복잡성을 처리할 수 있는 정교한 멀티 에이전트 시스템까지의 여정을 안내합니다. 각 노트북은 이전 단계를 기반으로 하며, 실용적이고 생산 준비가 된 구현을 유지하면서 새로운 개념과 기능을 소개합니다.
 
-### What You'll Learn
+### 배울 내용
 
-Through this series, you'll be exposed to:
-- **Core SDK fundamentals** with `query()` and the `ClaudeSDKClient` & `ClaudeAgentOptions` interfaces in the Python SDK
-- **Tool usage patterns** from basic WebSearch to complex MCP server integration
-- **Multi-agent orchestration** with specialized subagents and coordination
-- **Enterprise features** by leveraging hooks for compliance tracking and audit trails
-- **External system integration** via Model Context Protocol (MCP)
+이 시리즈를 통해 다음 내용을 접하게 됩니다:
+- Python SDK의 `query()`와 `ClaudeSDKClient` 및 `ClaudeAgentOptions` 인터페이스를 통한 **핵심 SDK 기초**
+- 기본적인 웹 검색(WebSearch)부터 복잡한 MCP 서버 통합까지의 **도구 사용 패턴**
+- 특화된 서브 에이전트 및 조율을 통한 **멀티 에이전트 오케스트레이션**
+- 거버넌스 추적 및 감사 로그를 위한 후크(hooks) 활용 등의 **엔터프라이즈 기능**
+- 모델 컨텍스트 프로토콜(MCP)을 통한 **외부 시스템 통합**
 
-Note: This tutorial assumes you have some level of familiarity with Claude Code. Ideally, if you have been using Claude Code to supercharge your coding tasks and would like to leverage its raw agentic power for tasks beyond Software Engineering, this tutorial will help you get started.
+참고: 이 튜토리얼은 독자가 Claude Code에 어느 정도 익숙하다고 가정합니다. Claude Code를 사용하여 코딩 작업을 가속화해 왔으며, 소프트웨어 엔지니어링 이외의 작업에도 그 강력한 에이전트 능력을 활용하고 싶다면 이 튜토리얼이 좋은 시작점이 될 것입니다.
 
-## Notebook Structure & Content
+## 노트북 구조 및 내용
 
-### [Notebook 00: The One-Liner Research Agent](00_The_one_liner_research_agent.ipynb)
+### [노트북 00: 한 줄 리서치 에이전트](00_The_one_liner_research_agent.ipynb)
 
-Start your journey with a simple yet powerful research agent built in just a few lines of code. This notebook introduces core SDK concepts and demonstrates how the Claude Agent SDK enables autonomous information gathering and synthesis.
+단 몇 줄의 코드로 작성된 간단하지만 강력한 리서치 에이전트로 여정을 시작하세요. 이 노트북은 핵심 SDK 개념을 소개하고 Claude Agent SDK가 어떻게 자율적인 정보 수집 및 합성을 가능하게 하는지 보여줍니다.
 
-**Key Concepts:**
-- Basic agent loops with `query()` and async iteration
-- WebSearch tool for autonomous research
-- Multimodal capabilities with the Read tool
-- Conversation context management with `ClaudeSDKClient`
-- System prompts for agent specialization
+**핵심 개념:**
+- `query()`와 비동기 반복(async iteration)을 이용한 기본 에이전트 루프
+- 자율 리서치를 위한 웹 검색(WebSearch) 도구
+- Read 도구를 활용한 멀티모달 기능
+- `ClaudeSDKClient`를 이용한 대화 컨텍스트 관리
+- 에이전트 특성 부여를 위한 시스템 프롬프트
 
-### [Notebook 01: The Chief of Staff Agent](01_The_chief_of_staff_agent.ipynb)
+### [노트북 01: 비서실장(Chief of Staff) 에이전트](01_The_chief_of_staff_agent.ipynb)
 
-Build a comprehensive AI Chief of Staff for a startup CEO, showcasing advanced SDK features for production environments. This notebook demonstrates how to create sophisticated agent architectures with governance, compliance, and specialized expertise.
+스타트업 CEO를 위한 종합 AI 비서실장을 구축하며, 실제 운영 환경을 위한 고급 SDK 기능을 살펴봅니다. 이 노트북은 거버넌스, 규정 준수 및 전문 지식을 갖춘 정교한 에이전트 아키텍처를 만드는 방법을 보여줍니다.
 
-**Key Features Explored:**
-- **Memory & Context:** Persistent instructions with CLAUDE.md files
-- **Output Styles:** Tailored communication for different audiences
-- **Plan Mode:** Strategic planning without execution for complex tasks
-- **Custom Slash Commands:** User-friendly shortcuts for common operations
-- **Hooks:** Automated compliance tracking and audit trails
-- **Subagent Orchestration:** Coordinating specialized agents for domain expertise
-- **Bash Tool Integration:** Python script execution for procedural knowledge and complex computations
+**탐구할 주요 기능:**
+- **메모리 및 컨텍스트:** CLAUDE.md 파일을 통한 영구 지침 유지
+- **출력 스타일:** 다양한 대상에 맞춤화된 커뮤니케이션
+- **계획 모드(Plan Mode):** 복잡한 작업을 위해 실행 없이 수행하는 전략 기획
+- **커스텀 슬래시 명령어:** 일반적인 작업을 위한 사용자 친화적인 단축키
+- **후크(Hooks):** 자동화된 규정 준수 추적 및 감사 로그
+- **서브 에이전트 오케스트레이션:** 도메인 전문 지식을 위한 특화 에이전트 조율
+- **Bash 도구 통합:** 절차적 지식 및 복잡한 계산을 위한 Python 스크립트 실행
 
-### [Notebook 02: The Observability Agent](02_The_observability_agent.ipynb)
+### [노트북 02: 관측성(Observability) 에이전트](02_The_observability_agent.ipynb)
 
-Expand beyond local capabilities by connecting agents to external systems through the Model Context Protocol. Transform your agent from a passive observer into an active participant in DevOps workflows.
+모델 컨텍스트 프로토콜(MCP)을 통해 에이전트를 외부 시스템에 연결함으로써 로컬 기능을 넘어 확장합니다. 에이전트를 수동적인 관찰자에서 DevOps 워크플로우의 적극적인 참여자로 변모시킵니다.
 
-**Advanced Capabilities:**
-- **Git MCP Server:** 13+ tools for repository analysis and version control
-- **GitHub MCP Server:** 100+ tools for complete GitHub platform integration
-- **Real-time Monitoring:** CI/CD pipeline analysis and failure detection
-- **Intelligent Incident Response:** Automated root cause analysis
-- **Production Workflow Automation:** From monitoring to actionable insights
+**고급 기능:**
+- **Git MCP 서버:** 저장소 분석 및 버전 제어를 위한 13개 이상의 도구
+- **GitHub MCP 서버:** 완전한 GitHub 플랫폼 통합을 위한 100개 이상의 도구
+- **실시간 모니터링:** CI/CD 파이프라인 분석 및 장애 감지
+- **지능형 사고 대응:** 자동화된 근본 원인 분석
+- **운영 워크플로우 자동화:** 모니터링부터 실행 가능한 통찰력 도출까지
 
-## Complete Agent Implementations
+## 완성된 에이전트 구현
 
-Each notebook includes an agent implementation in its respective directory:
-- **`research_agent/`** - Autonomous research agent with web search and multimodal analysis
-- **`chief_of_staff_agent/`** - Multi-agent executive assistant with financial modeling and compliance
-- **`observability_agent/`** - DevOps monitoring agent with GitHub integration
+각 노트북에는 해당 디렉토리에 에이전트 구현체가 포함되어 있습니다:
+- **`research_agent/`** - 웹 검색 및 멀티모달 분석 기능을 갖춘 자율 리서치 에이전트
+- **`chief_of_staff_agent/`** - 재무 모델링 및 규정 준수 기능을 갖춘 멀티 에이전트 임원 비서
+- **`observability_agent/`** - GitHub 통합 기능이 있는 DevOps 모니터링 에이전트
 
-**Running standalone agents:** To import agent modules outside of notebooks, either run from the `claude_agent_sdk/` directory or install the package in editable mode:
+**단독 에이전트 실행:** 노트북 외부에서 에이전트 모듈을 임포트하려면 `claude_agent_sdk/` 디렉토리에서 실행하거나 패키지를 편집 가능한 모드(editable mode)로 설치하세요:
 ```bash
 uv pip install -e .
 ```
 
-## Background
-### The Evolution of Claude Agent SDK
+## 배경지식
+### Claude Agent SDK의 진화
 
-Claude Code has emerged as one of Anthropic's most successful products, but not just for its SOTA coding capabilities. Its true breakthrough lies in something more fundamental: **Claude is exceptionally good at agentic work**.
+Claude Code는 Anthropic의 가장 성공적인 제품 중 하나로 부상했습니다. 이는 단지 최첨단 코딩 능력 때문만이 아닙니다. 그 진정한 돌파구는 더 근본적인 것에 있습니다: **Claude는 에이전트 작업에 매우 탁월하다는 점**입니다.
 
-What makes Claude Code special isn't just code understanding; it's the ability to:
-- Break down complex tasks into manageable steps autonomously
-- Use tools effectively and make intelligent decisions about which tools to use and when
-- Maintain context and memory across long-running tasks
-- Recover gracefully from errors and adapt approaches when needed
-- Know when to ask for clarification versus when to proceed with reasonable assumptions
+Claude Code를 특별하게 만드는 것은 단순한 코드 이해력이 아니라 다음과 같은 능력입니다:
+- 복잡한 작업을 관리 가능한 단계로 자율적으로 분해하는 능력
+- 도구를 효과적으로 사용하고, 어떤 도구를 언제 사용할지 지능적으로 결정하는 능력
+- 장시간 실행되는 작업 전반에 걸쳐 컨텍스트와 메모리를 유지하는 능력
+- 오류로부터 유연하게 회복하고 필요할 때 접근 방식을 수정하는 능력
+- 명확한 설명이 필요한 때와 합리적인 가정을 가지고 진행할 때를 구분하는 능력
 
-These capabilities have made Claude Code the closest thing to a "bare metal" harness for Claude's raw agentic power: a minimal yet complete and sophisticated interface that lets the model's capabilities shine with the least possible overhead.
+이러한 능력 덕분에 Claude Code는 Claude의 가공되지 않은 에이전트 능력을 위한 "베어 메탈(bare metal)" 하네스에 가장 가까운 존재가 되었습니다: 모델의 능력이 최소한의 오버헤드로 빛을 발할 수 있게 해주는 작지만 완전하고 정교한 인터페이스입니다.
 
-### Beyond Coding: The Agent Builder's Toolkit
+### 코딩을 넘어: 에이전트 빌더의 툴킷
 
-Originally an internal tool built by Anthropic engineers to accelerate development workflows, the SDK's public release revealed unexpected potential. After the release of the Claude Agent SDK and its GitHub integration, developers began using it for tasks far beyond coding:
+원래 개발 워크플로우를 가속화하기 위해 Anthropic 엔지니어들이 만든 내부 도구였으나, SDK의 공개 릴리즈는 예상치 못한 잠재력을 드러냈습니다. Claude Agent SDK와 GitHub 통합 기능이 발표된 후, 개발자들은 이를 코딩을 훨씬 넘어서는 작업에 사용하기 시작했습니다:
 
-- **Research agents** that gather and synthesize information across multiple sources
-- **Data analysis agents** that explore datasets and generate insights
-- **Workflow automation agents** that handle repetitive business processes
-- **Monitoring and observability agents** that watch systems and respond to issues
-- **Content generation agents** that create and refine various types of content
+- 여러 소스에서 정보를 수집하고 합성하는 **리서치 에이전트**
+- 데이터셋을 탐색하고 통찰력을 생성하는 **데이터 분석 에이전트**
+- 반복적인 비즈니스 프로세스를 처리하는 **워크플로우 자동화 에이전트**
+- 시스템을 감시하고 문제에 대응하는 **모니터링 및 관측성 에이전트**
+- 다양한 유형의 콘텐츠를 생성하고 다듬는 **콘텐츠 생성 에이전트**
 
-The pattern was clear: the SDK had inadvertently become an effective agent-building framework. Its architecture, designed to handle software development complexity, proved remarkably well-suited for general-purpose agent creation.
+패턴은 명확했습니다: SDK는 의도치 않게 효과적인 에이전트 구축 프레임워크가 되었습니다. 소프트웨어 개발의 복잡성을 처리하도록 설계된 아키텍처가 범용 에이전트 생성에도 매우 적합하다는 것이 입증되었습니다.
 
-This tutorial series demonstrates how to leverage the Claude Agent SDK to build highly efficient agents for any domain or use case, from simple automation to complex enterprise systems. 
+이 튜토리얼 시리즈는 Claude Agent SDK를 활용하여 단순한 자동화부터 복잡한 엔터프라이즈 시스템까지, 모든 도메인이나 사용 사례를 위한 매우 효율적인 에이전트를 구축하는 방법을 보여줍니다.
 
-## Contributing
+## 기여하기
 
-Found an issue or have a suggestion? Please open an issue or submit a pull request!
+문제를 발견했거나 제안 사항이 있으신가요? 이슈를 생성하거나 풀 리퀘스트를 제출해 주세요!
+    

@@ -1,55 +1,55 @@
+# Promptfoo를 이용한 평가 (Evaluations with Promptfoo)
 
-# Evaluations with Promptfoo
+### 이 평가 스위트에 대한 참고 사항
 
-### A Note on This Evaluation Suite
+1) 아래 지침을 반드시 따르십시오. 특히 필요한 패키지에 대한 사전 요구 사항을 확인하세요.
 
-1) Be sure to follow the instructions below - specifically the pre-requisites about required packages.
+2) 전체 평가 스위트를 실행하려면 평소보다 높은 요율 제한(rate limit)이 필요할 수 있습니다. Promptfoo에서 일부 테스트만 실행하는 것을 고려해 보세요.
 
-2) Running the full eval suite may require higher than normal rate limits. Consider only running a subset of tests in promptfoo.
+3) 모든 테스트가 즉시 통과하지는 않을 것입니다. 우리는 평가를 어느 정도 도전적으로 설계했습니다.
 
-3) Not every test will pass out of the box - we've designed the evaluation to be moderately challenging.
+### 사전 요구 사항
+Promptfoo를 사용하려면 시스템에 node.js와 npm이 설치되어 있어야 합니다. 자세한 내용은 [이 가이드](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)를 참조하십시오.
 
-### Pre-requisities 
-To use Promptfoo you will need to have node.js & npm installed on your system. For more information follow [this guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)  
+npm을 사용하여 promptfoo를 설치하거나 npx를 사용하여 직접 실행할 수 있습니다. 이 가이드에서는 npx를 사용합니다.
 
-You can install promptfoo using npm or run it directly using npx. In this guide we will use npx.  
+*참고: 이 예제에서는 `npx promptfoo@latest init`를 실행할 필요가 없습니다. 이 디렉토리에 이미 초기화된 `promptfooconfig.yaml` 파일이 있습니다.*
 
-*Note: For this example you will not need to run `npx promptfoo@latest init` there is already an initialized `promptfooconfig.yaml` file in this directory*  
+공식 문서는 [여기](https://www.promptfoo.dev/docs/getting-started)에서 확인하세요.
 
-See the official docs [here](https://www.promptfoo.dev/docs/getting-started)  
+### 시작하기
 
-### Getting Started
+시작하려면 ANTHROPIC_API_KEY 환경 변수 또는 선택한 프로바이더에 필요한 다른 키를 설정하십시오. `export ANTHROPIC_API_KEY=YOUR_API_KEY`와 같이 설정할 수 있습니다.
 
-To get started, set your ANTHROPIC_API_KEY environment variable, or other required keys for the providers you selected. You can do `export ANTHROPIC_API_KEY=YOUR_API_KEY`.
+그런 다음 `evaluation` 디렉토리로 `cd` 이동하여 `npx promptfoo@latest eval -c promptfooconfig.yaml --output ../data/results.csv`를 입력하십시오.
 
-Then, `cd` into the `evaluation` directory and write `npx promptfoo@latest eval -c promptfooconfig.yaml --output ../data/results.csv`
+그 후 `npx promptfoo@latest view`를 실행하여 결과를 확인할 수 있습니다.
 
-Afterwards, you can view the results by running `npx promptfoo@latest view`.
+### 작동 방식
 
-### How it Works
+`promptfooconfig.yaml` 파일은 우리 평가 설정의 핵심입니다. 여기에는 다음과 같은 중요한 섹션들이 정의되어 있습니다.
 
-The promptfooconfig.yaml file is the heart of our evaluation setup. It defines several crucial sections:
+**프롬프트 (Prompts):**
+- 프롬프트는 `prompts.py` 파일에서 가져옵니다.
+- 이 프롬프트들은 언어 모델 성능의 다양한 측면을 테스트하도록 설계되었습니다.
 
-Prompts:
-- Prompts are imported from the prompts.py file.
-- These prompts are designed to test various aspects of LM performance.
+**프로바이더 (Providers):**
+- 여기에서 어떤 Claude 모델을 사용할지 구성합니다.
 
-Providers:
-- We configure which Claude model(s) we're using here.
+**테스트 (Tests):**
+- 테스트 케이스가 여기에 정의되어 있습니다.
+- 이 테스트들은 평가를 위한 입력값과 예상 출력값을 지정합니다.
+- Promptfoo는 다양한 내장 테스트 유형을 제공하며(문서 참조), 직접 정의할 수도 있습니다.
 
-Tests:
-- Test cases are defined here.
-- These tests specify the inputs and expected outputs for our evaluations.
-- Promptfoo offers various built-in test types (see docs), or you can define your own.
+**출력 (Output):**
+- 평가 결과의 형식과 위치를 지정합니다.
+- Promptfoo는 다양한 출력 형식도 지원합니다!
 
-Output:
-- Specifies the format and location of evaluation results.
-- Promptfoo supports various output formats too!
+### Python 바이너리 재정의
 
-### Overriding the Python binary
+기본적으로 Promptfoo는 셸에서 `python`을 실행합니다. `python`이 적절한 실행 파일을 가리키고 있는지 확인하십시오.
 
-By default, promptfoo will run python in your shell. Make sure python points to the appropriate executable.
+Python 바이너리가 없으면 "python: command not found" 오류가 표시됩니다.
 
-If a python binary is not present, you will see a "python: command not found" error.
-
-To override the Python binary, set the PROMPTFOO_PYTHON environment variable. You may set it to a path (such as /path/to/python3.11) or just an executable in your PATH (such as python3.11).
+Python 바이너리를 재정의하려면 `PROMPTFOO_PYTHON` 환경 변수를 설정하십시오. 경로(예: `/path/to/python3.11`) 또는 PATH에 있는 실행 파일 이름(예: `python3.11`)으로 설정할 수 있습니다.
+    

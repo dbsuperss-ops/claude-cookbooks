@@ -1,11 +1,12 @@
-# Summarization with Claude
+# Claude를 이용한 요약 (Summarization with Claude)
 
-Explore Claude's ability to summarize and synthesize information from multiple sources using various techniques.
+다양한 기술을 사용하여 여러 소스의 정보를 요약하고 합성하는 Claude의 능력을 탐구합니다.
 
-## Contents
+## 구성 내용
 
-- `guide.ipynb`: Main tutorial notebook
-- `data/`: Data files for examples and testing
-- `evaluation/`: Evaluation scripts using Promptfoo
+- `guide.ipynb`: 주요 튜토리얼 노트북
+- `data/`: 예제 및 테스트를 위한 데이터 파일
+- `evaluation/`: Promptfoo를 사용한 평가 스크립트
 
-For evaluation instructions, see `evaluation/README.md`.
+평가 지침은 `evaluation/README.md`를 참조하십시오.
+    
