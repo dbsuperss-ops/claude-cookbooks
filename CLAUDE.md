@@ -1,110 +1,109 @@
-# Claude Cookbooks
+# Claude 쿡북 (Claude Cookbooks)
 
-A collection of Jupyter notebooks and Python examples for building with the Claude API.
+Claude API를 사용하여 빌드하기 위한 Jupyter 노트북 및 Python 예제 모음입니다.
 
-## Quick Start
+## 빠른 시작
 
 ```bash
-# Install dependencies
+# 의존성 설치
 uv sync --all-extras
 
-# Install pre-commit hooks
+# pre-commit 훅 설치
 uv run pre-commit install
 
-# Set up API key
+# API 키 설정
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# .env 파일을 수정하고 ANTHROPIC_API_KEY를 추가하세요.
 ```
 
-## Development Commands
+## 개발 기능/명령어
 
 ```bash
-make format        # Format code with ruff
-make lint          # Run linting
-make check         # Run format-check + lint
-make fix           # Auto-fix issues + format
-make test          # Run pytest
+make format        # ruff를 사용하여 코드 포맷팅
+make lint          # 린팅 실행
+make check         # 포맷 체크 + 린트 실행
+make fix           # 이슈 자동 수정 + 포맷팅
+make test          # pytest 실행
 ```
 
-Or directly with uv:
+또는 uv를 직접 사용하는 경우:
 
 ```bash
-uv run ruff format .           # Format
-uv run ruff check .            # Lint
-uv run ruff check --fix .      # Auto-fix
+uv run ruff format .           # 포맷팅
+uv run ruff check .            # 린팅
+uv run ruff check --fix .      # 자동 수정
 uv run pre-commit run --all-files
 ```
 
-## Code Style
+## 코드 스타일
 
-- **Line length:** 100 characters
-- **Quotes:** Double quotes
-- **Formatter:** Ruff
+- **한 줄 길이:** 100자
+- **따옴표:** 큰따옴표 (Double quotes)
+- **포맷터:** Ruff
 
-Notebooks have relaxed rules for mid-file imports (E402), redefinitions (F811), and variable naming (N803, N806).
+노트북의 경우 파일 중간의 임포트(E402), 재정의(F811), 그리고 변수 명명(N803, N806)에 대해 완화된 규칙을 적용합니다.
 
-## Git Workflow
+## Git 워크플로우
 
-**Branch naming:** `<username>/<feature-description>`
+**브랜치 명명:** `<사용자명>/<기능-설명>`
 
-**Commit format (conventional commits):**
+**커밋 형식 (Conventional Commits):**
+
 ```
-feat(scope): add new feature
-fix(scope): fix bug
-docs(scope): update documentation
-style: lint/format
+feat(scope): 새로운 기능 추가
+fix(scope): 버그 수정
+docs(scope): 문서 업데이트
+style: 린트/포맷팅
 ```
 
-## Key Rules
+## 주요 규칙
 
-1. **API Keys:** Never commit `.env` files. Always use `os.environ.get("ANTHROPIC_API_KEY")`
+1. **API 키:** `.env` 파일을 절대 커밋하지 마세요. 항상 `os.environ.get("ANTHROPIC_API_KEY")`를 사용하세요.
+2. **의존성:** `uv add <패키지>` 또는 `uv add --dev <패키지>`를 사용하세요. `pyproject.toml`을 직접 수정하지 마세요.
+3. **모델:** 최신 Claude 모델을 사용하세요. 최신 버전은 docs.anthropic.com에서 확인하세요.
 
-2. **Dependencies:** Use `uv add <package>` or `uv add --dev <package>`. Never edit pyproject.toml directly.
-
-3. **Models:** Use current Claude models. Check docs.anthropic.com for latest versions.
    - Sonnet: `claude-sonnet-4-6`
    - Haiku: `claude-haiku-4-5`
    - Opus: `claude-opus-4-6`
-   - **Never use dated model IDs** (e.g., `claude-sonnet-4-6-20250514`). Always use the non-dated alias.
-   - **Bedrock model IDs** follow a different format. Use the base Bedrock model ID from the docs:
+   - **날짜가 포함된 모델 ID는 사용하지 마세요** (예: `claude-sonnet-4-6-20250514`). 항상 날짜가 없는 에일리어스(Alias)를 사용하세요.
+   - **Bedrock 모델 ID**는 형식이 다릅니다. 문서에 명시된 기본 Bedrock 모델 ID를 사용하세요:
      - Opus 4.6: `anthropic.claude-opus-4-6-v1`
      - Sonnet 4.5: `anthropic.claude-sonnet-4-5-20250929-v1:0`
      - Haiku 4.5: `anthropic.claude-haiku-4-5-20251001-v1:0`
-     - Prepend `global.` for global endpoints (recommended): `global.anthropic.claude-opus-4-6-v1`
-     - Note: Bedrock models before Opus 4.6 require dated IDs in their Bedrock model ID.
+     - 글로벌 엔드포인트에는 `global.`을 앞에 붙이는 것을 권장합니다: `global.anthropic.claude-opus-4-6-v1`
+     - 참고: Opus 4.6 이전의 Bedrock 모델은 Bedrock 모델 ID에 날짜가 포함된 ID가 필요합니다.
+4. **노트북:**
 
-4. **Notebooks:**
-   - Keep outputs in notebooks (intentional for demonstration)
-   - One concept per notebook
-   - Test that notebooks run top-to-bottom without errors
+   - 노트북의 출력 결과를 유지하세요 (시연 목적으로 의도됨).
+   - 노트북 하나당 하나의 개념만 다룹니다.
+   - 노트북이 처음부터 끝까지 오류 없이 실행되는지 테스트하세요.
+5. **품질 체크:** 커밋하기 전에 `make check`를 실행하세요. Pre-commit 훅이 포맷팅과 노트북 구조를 검증합니다.
 
-5. **Quality checks:** Run `make check` before committing. Pre-commit hooks validate formatting and notebook structure.
+## 슬래시 명령어
 
-## Slash Commands
+다음 명령어들은 Claude Code와 CI에서 사용할 수 있습니다:
 
-These commands are available in Claude Code and CI:
+- `/notebook-review` - 노트북 품질 리뷰
+- `/model-check` - Claude 모델 참조 유효성 검사
+- `/link-review` - 변경된 파일의 링크 확인
 
-- `/notebook-review` - Review notebook quality
-- `/model-check` - Validate Claude model references
-- `/link-review` - Check links in changed files
-
-## Project Structure
+## 프로젝트 구조
 
 ```
-capabilities/      # Core Claude capabilities (RAG, classification, etc.)
-skills/            # Advanced skill-based notebooks
-tool_use/          # Tool use and integration patterns
-multimodal/        # Vision and image processing
-misc/              # Batch processing, caching, utilities
-third_party/       # Pinecone, Voyage, Wikipedia integrations
-extended_thinking/ # Extended reasoning patterns
-scripts/           # Validation scripts
-.claude/           # Claude Code commands and skills
+capabilities/      # 핵심 Claude 기능 (RAG, 분류 등)
+skills/            # 고급 스킬 기반 노트북
+tool_use/          # 도구 사용 및 통합 패턴
+multimodal/        # 비전 및 이미지 처리
+misc/              # 배치 프로세싱, 캐싱, 유틸리티
+third_party/       # Pinecone, Voyage, Wikipedia 통합
+extended_thinking/ # 확장된 사고(Thinking) 패턴
+scripts/           # 검증 스크립트
+.claude/           # Claude Code 명령어 및 스킬
 ```
 
-## Adding a New Cookbook
+## 새로운 쿡북 추가하기
 
-1. Create notebook in the appropriate directory
-2. Add entry to `registry.yaml` with title, description, path, authors, categories
-3. Add author info to `authors.yaml` if new contributor
-4. Run quality checks and submit PR
+1. 적절한 디렉토리에 노트북을 생성합니다.
+2. 제목, 설명, 경로, 작성자, 카테고리를 포함하여 `registry.yaml`에 항목을 추가합니다.
+3. 새로운 기여자라면 `authors.yaml`에 작성자 정보를 추가합니다.
+4. 품질 체크를 실행하고 PR을 제출합니다.
